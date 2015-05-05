@@ -1,0 +1,93 @@
+import os
+import zipfile
+from htmlparser import HTMLParser
+
+def checkFile(filesObjects):
+    totalErrors = list()
+
+    for fileObject in fileObjects:
+
+        # Initialise a new parser from the HTMLParser class
+        parser = HTMLParser()
+        
+        # Extract the extension from the file object
+        extension = os.path.splitext(fileObject)[-1].lower()
+
+        # If it is a single file, simply parse it
+        # Treat a .php file the same as a .html file
+        # as the parsing function ignores script and php tags
+        if (extension.lower() == ".html" or extension.lower() == ".php"):
+            errors = initialiseErrors(fileObject)
+            """ Might need to open before reading file"""
+            data = fileObject.read()
+            # This function parses the file and places the results in its class variables
+            parser.parse(data)
+            # These variables are then extracted into the errors framework from initialiseErrors()
+            errors['syntaxErrors'] = parser.syntaxErrors
+            errors['semanticErrors'] = parser.semanticErrors
+            errors['deprecatedErrors'] = parser.deprecatedErrors
+            errors['practiceErrors'] = parser.practiceErrors
+            totalErrors.append(errors)
+
+        # If it is a zip file, extract it and for each file
+        # That is either .html or .php, parse them
+        elif extension.lower() == ".zip":
+            zipFile = zipfile.ZipFile(fileObject, 'r')
+            nameList = zipFile.namelist()
+            for name in nameList:
+                if(os.path.splitext(name)[-1].lower()==".html"
+                   or os.path.splitext(name)[-1].lower()==".php"):
+                    try:
+                        data = zipFile.read(name)
+                    except KeyError:
+                        continue
+                    else:
+                        errors = initialiseErrors(fileObject)
+                        """ Might need to open before reading file"""
+                        data = fileObject.read()
+                        # This function parses the file and places the results in its class variables
+                        parser.parseFile(data)
+                        # These variables are then extracted into the errors framework from initialiseErrors()
+                        errors['syntaxErrors'] = parser.syntaxErrors
+                        errors['semanticErrors'] = parser.semanticErrors
+                        errors['deprecatedErrors'] = parser.deprecatedErrors
+                        errors['practiceErrors'] = parser.practiceErrors
+                        totalErrors.append(errors)
+    return totalErrors
+
+def checkUrl(data):
+    return
+
+def checkDirect(data):
+    totalErrors = list()
+    errors = initialiseErrors("Direct")
+    parser = HTMLParser()
+    parser.parse(str(data))
+    errors['syntaxErrors'] = parser.syntaxErrors
+    errors['semanticErrors'] = parser.semanticErrors
+    errors['deprecatedErrors'] = parser.deprecatedErrors
+    errors['practiceErrors'] = parser.practiceErrors
+    errors['sourceCode'] = str(data).splitlines()
+    totalErrors.append(errors)
+    return totalErrors
+
+def initialiseErrors(fileObject):
+    errors = { 'fileName':str(fileObject),
+               'syntaxErrors':{},
+               'semanticErrors':{},
+               'deprecatedErrors':{},
+               'practiceErrors':{},
+               'sourceCode':[] }
+    return errors
+    
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,60 @@
+<section class="body--home maxWidthMedium">
+	<section class="pageIntro">
+		<h1>Validate your <strong>HTML</strong></h1>
+		<p>
+			HTML Thor validates your HTML, checking for syntax and semantic errors plus more!
+		</p>
+		<!-- <p>
+			Proin aliquam sem non ante vehicula bibendum.
+		</p> -->
+	</section>
+	<form name="form--inputs">
+		<section class="home-uploadSection clearfix">
+			<div class="button-bigAction button_wrapper font--button floatLeft" data-active="true">
+				<button id="button--uploadFiles" class="button" type="button">
+					Upload HTML
+				</button>
+				<div style="height: 0px;width: 0px; overflow:hidden;">
+					<input id="input--uploadFiles" type="file" name="userFiles[]" accept=".html,.php, .zip" multiple>Upload HTML</input>				
+				</div>
+			</div>
+			<div class="home-uploadSection-text floatLeft">
+				<p class="text--smallFaint">
+					You can upload multiple .html and .php files as well as .zip folders. 
+					You can also upload HTML 4 code
+				</p>
+			</div>
+		</section>
+		<section class="home-uploadSection state--unavailable">
+			<div class="unavailableText">Coming soon™</div>
+			<label for="input--home-url">Validate via <strong>URL</strong></label>
+			<div class="home-url clearfix">
+				<div class="home-url-input floatLeft">
+					<input id="input--home-url" name="input--home-url" class="cleanInput fullWidth softPlaceholder" ng-model="userUrl" type="text" placeholder="Enter a url : http://www.example.com" />
+				</div>
+				<div class="home-url-button floatLeft">
+					<div class="button-bigAction smaller button_wrapper font--button" data-ng-class="{'state--inactive' : !isValidUrl()}">
+						<button class="button" type="button">
+							Validate
+						</button>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section class="home-uploadSection">
+			<label for="input--home-direct">Validate via <strong>Direct Input</strong></label>
+			<div class="home-url clearfix">
+				<div class="home-url-input floatLeft">
+					<textarea id="input--home-direct" data-ng-model="userDirect" class="height--medium cleanInput fullWidth noResize softPlaceholder" placeholder="Paste your HTML here"></textarea>
+				</div>
+				<div class="home-url-button floatLeft">
+					<div class="button-bigAction smaller button_wrapper font--button" data-ng-class="{ 'state--inactive' : !isValidDirect() }">
+						<button id="button--directInput" class="button" type="button">
+							Validate
+						</button>
+					</div>
+				</div>
+			</div>
+		</section>
+	</form>
+</section>
