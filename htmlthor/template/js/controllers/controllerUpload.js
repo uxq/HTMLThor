@@ -4,7 +4,7 @@
 
 //thorpedoDirect
 
-htmlthorApp.controller('UploadController', function ($location, $http, $scope, resultsService) {
+htmlthorApp.controller('UploadController', function ($location, $http, $scope, Upload, resultsService) {
 
 	$scope.userUrl = "http://www.";
 	$scope.userDirect = "";
@@ -30,43 +30,94 @@ htmlthorApp.controller('UploadController', function ($location, $http, $scope, r
 		var uploadButton = $("#button--uploadFiles");
 		var uploadInput = $("#input--uploadFiles");
 		
-		console.log("Initialized the upload stuff...", uploadButton, uploadInput);
+		//console.log("Initialized the upload stuff...", uploadButton, uploadInput);
 		
 		uploadButton.click(function() {
 			uploadInput.click();
-			console.log("Clicked button and clicked input");
+			//console.log("Clicked button and clicked input");
 		});
 		
 		uploadInput.change(function() {
 			var selectedFiles = uploadInput[0].files;
-			console.log("Selected some files", uploadInput.val(), selectedFiles);
-			$scope.uploadFiles(selectedFiles);
+			//console.log("Selected some files", uploadInput.val(), selectedFiles);
+			//$scope.uploadFiles(selectedFiles);
+			$scope.upload(selectedFiles);
 		});
 		
 	}
 
+	$scope.upload = function (files) {
+        if (files && files.length) {
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                Upload.upload({
+                    url: '/thorpedoFile/',
+                    fields: {},
+                    file: file
+                }).progress(function (evt) {
+                    var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                    console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
+                }).success(function (data, status, headers, config) {
+                    console.log('file ' + config.file.name + 'uploaded. Response: ' + data);
+                });
+            }
+        }
+    };
+
 	$scope.uploadFiles = function(selectedFiles) {
-		if(selectedFiles.length == 1) {
-			var singleFile = selectedFiles[0];
-			var singleFileName = singleFile.name;
-			var singleFileExtension = singleFileName.substr(singleFileName.lastIndexOf('.') + 1);
-			if (singleFileExtension == "html" || singleFileExtension == "php" || singleFileExtension == "zip") {
-				console.log("Individual file!!!", singleFileName, singleFileExtension);
-				$scope.submitIndividualUpload(singleFile);
-			} else {
-				console.log("Incorrect file type", singleFileName, singleFileExtension);
-			}
-		} else {
-			console.log("Multiple files!!!");
-			for(var i = 0; i < selectedFiles.length; i++) {
-				var thisFileExtension = selectedFiles[i].name.substr(singleFileName.lastIndexOf('.') + 1);
-				if (thisFileExtension == "html" || thisFileExtension == "php" || thisFileExtension == "zip") {
-					console.log("Individual file!!!", thisFileExtension);
-				} else {
-					console.log("Incorrect file type", thisFileExtension);
-				}
-			}
-		}
+
+		if(selectedFiles.length == 0) return;
+
+		//var fd = new FormData();
+        //fd.append('file', selectedFiles[0]);
+
+		// $http.post('/thorpedoFile/', {
+		// 	file: selectedFiles[0]
+		// }, {
+  //           // transformRequest: angular.identity,
+  //           headers: {'Content-Type': 'multipart/form-data'}
+  //       })
+  //       .success(function(d){
+  //       })
+  //       .error(function(d){
+  //       });
+
+		$http({
+            method: 'POST',
+            url: "/thorpedoFile/",
+            headers: { 'Content-Type': undefined },
+            data: {
+            	file: selectedFiles[0]
+            }
+        }).
+        success(function (data, status, headers, config) {
+            //alert("success!");
+        }).
+        error(function (data, status, headers, config) {
+            //alert("failed!");
+        });
+
+		// if(selectedFiles.length == 1) {
+		// 	var singleFile = selectedFiles[0];
+		// 	var singleFileName = singleFile.name;
+		// 	var singleFileExtension = singleFileName.substr(singleFileName.lastIndexOf('.') + 1);
+		// 	if (singleFileExtension == "html" || singleFileExtension == "php" || singleFileExtension == "zip") {
+		// 		console.log("Individual file!!!", singleFileName, singleFileExtension);
+		// 		$scope.submitIndividualUpload(singleFile);
+		// 	} else {
+		// 		console.log("Incorrect file type", singleFileName, singleFileExtension);
+		// 	}
+		// } else {
+		// 	console.log("Multiple files!!!");
+		// 	for(var i = 0; i < selectedFiles.length; i++) {
+		// 		var thisFileExtension = selectedFiles[i].name.substr(singleFileName.lastIndexOf('.') + 1);
+		// 		if (thisFileExtension == "html" || thisFileExtension == "php" || thisFileExtension == "zip") {
+		// 			console.log("Individual file!!!", thisFileExtension);
+		// 		} else {
+		// 			console.log("Incorrect file type", thisFileExtension);
+		// 		}
+		// 	}
+		// }
 	}
 
 	$scope.initDirectInput = function() {

@@ -2,7 +2,7 @@ $(document).ready(function() {
     console.log("Document Has Loaded!");
 });
 
-var htmlthorApp = angular.module('htmlthorApp', ['ngRoute', 'ui.router', 'ngSanitize']);
+var htmlthorApp = angular.module('htmlthorApp', ['ngRoute', 'ui.router', 'ngSanitize', 'ngFileUpload']);
 
 htmlthorApp.config(function($stateProvider, $locationProvider, $urlRouterProvider) {
 
