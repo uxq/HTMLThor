@@ -50,9 +50,11 @@ htmlthorApp.controller('UploadController', function ($location, $http, $scope, U
         if (files && files.length) {
             for (var i = 0; i < files.length; i++) {
                 var file = files[i];
+                var extension = file.name.split(".");
+                extension = extension[extension.length-1];
                 Upload.upload({
                     url: '/thorpedoFile/',
-                    fields: {},
+                    fields: {file_extension: extension},
                     file: file
                 }).progress(function (evt) {
                     var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);

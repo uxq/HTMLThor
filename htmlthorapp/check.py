@@ -5,11 +5,11 @@ from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from htmlparser import HTMLParser
 
-def checkFile(uploadFile):
+def checkFile(uploadFile, file_extension):
 
     #(this_file_name, this_file_extension) = os.path.splitext(filename)
 
-    file = default_storage.save('tmp/'+uuid.uuid4().hex, ContentFile(uploadFile.read()))
+    file = default_storage.save('tmp/'+uuid.uuid4().hex+"."+file_extension, ContentFile(uploadFile.read()))
     #fileObject = os.path.join(settings.MEDIA_ROOT, path)
 
     totalErrors = list()
@@ -25,25 +25,24 @@ def checkFile(uploadFile):
     # If it is a single file, simply parse it
     # Treat a .php file the same as a .html file
     # as the parsing function ignores script and php tags
-    #if (this_file_extension == ".html" or this_file_extension == ".php"):
+    if (file_extension == "html" or file_extension == "php"):
 
-    fileObject = open(file, 'r')
+        fileObject = open(file, 'r')
 
-    errors = initialiseErrors(fileObject)
-    """ Might need to open before reading file"""
-    data = fileObject.read()
-    # This function parses the file and places the results in its class variables
-    parser.parse(data)
-    # These variables are then extracted into the errors framework from initialiseErrors()
-    errors['syntaxErrors'] = parser.syntaxErrors
-    errors['semanticErrors'] = parser.semanticErrors
-    errors['deprecatedErrors'] = parser.deprecatedErrors
-    errors['practiceErrors'] = parser.practiceErrors
-    totalErrors.append(errors)
+        errors = initialiseErrors(fileObject)
+        """ Might need to open before reading file"""
+        data = fileObject.read()
+        # This function parses the file and places the results in its class variables
+        parser.parse(data)
+        # These variables are then extracted into the errors framework from initialiseErrors()
+        errors['syntaxErrors'] = parser.syntaxErrors
+        errors['semanticErrors'] = parser.semanticErrors
+        errors['deprecatedErrors'] = parser.deprecatedErrors
+        errors['practiceErrors'] = parser.practiceErrors
+        totalErrors.append(errors)
 
     # If it is a zip file, extract it and for each file
     # That is either .html or .php, parse them
-    """
     elif this_file_extension == ".zip":
         zipFile = zipfile.ZipFile(fileObject, 'r')
         nameList = zipFile.namelist()
@@ -64,7 +63,6 @@ def checkFile(uploadFile):
                     errors['deprecatedErrors'] = parser.deprecatedErrors
                     errors['practiceErrors'] = parser.practiceErrors
                     totalErrors.append(errors)
-    """
 
     return totalErrors
 
