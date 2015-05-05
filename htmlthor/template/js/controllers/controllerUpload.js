@@ -59,6 +59,8 @@ htmlthorApp.controller('UploadController', function ($location, $http, $scope, U
                     console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
                 }).success(function (data, status, headers, config) {
                     console.log('file ' + config.file.name + 'uploaded. Response: ' + data);
+            		resultsService.setResults(data);
+            		$scope.redirectToResults();
                 });
             }
         }
