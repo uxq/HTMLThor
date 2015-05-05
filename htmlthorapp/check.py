@@ -3,7 +3,7 @@ import zipfile
 import uuid
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
-from htmlparser import HTMLParser
+from htmlparser import MyHTMLParser
 
 def checkFile(uploadFile, file_extension):
 
@@ -17,7 +17,7 @@ def checkFile(uploadFile, file_extension):
     #for fileObject in fileObjects:
 
     # Initialise a new parser from the HTMLParser class
-    parser = HTMLParser()
+    parser = MyHTMLParser()
     
     # Extract the extension from the file object
     #extension = os.path.splitext(fileObject)[-1].lower()
@@ -56,7 +56,7 @@ def checkFile(uploadFile, file_extension):
                     errors = initialiseErrors(fileObject)
                     data = fileObject.read()
                     # This function parses the file and places the results in its class variables
-                    parser.parseFile(data)
+                    parser.parse(data)
                     # These variables are then extracted into the errors framework from initialiseErrors()
                     errors['syntaxErrors'] = parser.syntaxErrors
                     errors['semanticErrors'] = parser.semanticErrors

@@ -1,8 +1,12 @@
 from sql import SqlFunctions
 from encapsulation import Encapsulation
+from HTMLParser import HTMLParser
 
-class HTMLParser:
+class MyHTMLParser(HTMLParser):
     def __init__(self):
+        
+        HTMLParser.__init__(self)
+
         # The main lists of errors for the entire file
         self.syntaxErrors = list()
         self.semanticErrors = list()
@@ -32,6 +36,9 @@ class HTMLParser:
         self.isClosingTag = False
         self.whiteSpaceFlag = False
 
+        self.openedTag = list()
+        self.closedTag = list()
+
     def closeTheTag(self):
         self.openDoctype = False
         self.closeTag = True
@@ -40,6 +47,65 @@ class HTMLParser:
         self.endTagName = False
         self.tagChecked = False
         self.faultyTag = False
+
+    # Andy's stuff
+
+    def handle_starttag(self, tag, attributes):
+
+        sql = SqlFunctions();
+
+        # print "Encountered a start tag:", tag
+        self.openedTag.append(tag);
+
+        # Check attributes
+
+        attrList = sql.getAttr(tag.lower())
+
+        for attribute, value in attributes:
+
+            validAttr = True if attribute in attrList else False
+                                              
+            if (attribute[0:5].lower() == "data-"):
+                validAttr = True
+                    
+            if (not validAttr):
+                error = {'line': 1, 'column': 1, 'message' : attribute + " " + sql.getErrMsg(22), 'type': tag}
+                self.syntaxErrors.append(error)
+                debugError = {'line': 1, 'column': 1, 'message' : "Not a valid attribute("+attribute+")", 'type': "practice"}
+                self.practiceErrors.append(debugError) 
+            elif (sql.isDeprecatedAttribute(attribute)):
+                error = {'line': 1, 'column': 1, 'message' : sql.getErrMsg(30).replace("--attr",attribute).replace("--tag",tag), 'type': "deprecated"}
+                self.deprecatedErrors.append(error) 
+
+
+    def handle_endtag(self, tag):
+        print "Encountered an end tag:", tag
+        print "Last opened tag was: ", self.openedTag[-1]
+
+        matchFound = False
+
+        #Look for tag. If tag isn't closed (no match is found), mark as error on tag.
+
+        while (len(self.openedTag) > 0 and not matchFound):
+
+            if (self.openedTag[-1] == tag.lower()):
+                if(tag.lower() in ["html", "head", "body", "!doctype", "title", "meta", "main", "base"]):                                 
+                    self.requiredTags.append(tag.lower())
+                matchFound = True
+            else:
+                error = {'line': 1, 'column': 0, 'message' : self.openedTag[-1] + ' not closed...', 'type': "syntax"}
+                self.syntaxErrors.append(error)
+                # matchFound = True
+        
+            del self.openedTag[-1]
+
+    def handle_data(self, data):
+        return 0
+        # print "Encountered some data  :", data
+
+
+    # End of Andy's stuff
+
 
     def parseEncapsulationErrors(self,errors):
         sql = SqlFunctions();
@@ -63,6 +129,9 @@ class HTMLParser:
 
 
     def parse(self, htmlString):
+        
+        self.feed(htmlString)
+
         prevTag = ""
         tagStartSet = False
         # Instantiate the sqlFunctions class
@@ -525,7 +594,7 @@ class HTMLParser:
                 # ==============================================
                 # Tag checking start
                 # ==============================================
-                if(char=='<'):
+                if(char == '<'):
                     self.openTag = True
                     continue
 
@@ -538,7 +607,7 @@ class HTMLParser:
                     # Check if opened a comment tag
                     if((char=='!') and (lineString[colOffset+1]=='-') and (lineString[colOffset+2]=='-')):
                         self.startComment = True
-                        openTag = False
+                        self.openTag = False
                             
                     # Check if opened a php tag
                     if((char=='?') and (lineString[colOffset+1].lower()=='p') and (lineString[colOffset+2].lower()=='h') and (lineString[colOffset+3].lower()=='p')):
@@ -872,6 +941,10 @@ class HTMLParser:
 
         if("!doctype" not in self.requiredTags):
             error = {'line': 1, 'column': 0, 'message' : sql.getErrMsg(3), 'type': "syntax"}
+            self.syntaxErrors.append(error)
+
+        if (len(self.openedTag) > 0):
+            error = {'line': 1, 'column': 0, 'message' : 'some tags are not closed...', 'type': "syntax"}
             self.syntaxErrors.append(error)
 
                     
