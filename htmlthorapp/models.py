@@ -30,8 +30,7 @@ class Error(models.Model):
     ('SEM', 'Semantic'),
     ('SYN', 'Syntax'),
     ('WAR', 'Warning'))
-    errorType = models.CharField(max_length=3,
-                                      choices=ERROR_OPTIONS)
+    errorType = models.CharField(max_length=3, choices=ERROR_OPTIONS)
     
 
 

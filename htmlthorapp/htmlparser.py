@@ -60,7 +60,7 @@ class MyHTMLParser(HTMLParser):
         # Check attributes
 
         attrList = sql.getAttr(tag.lower())
-
+        
         for attribute, value in attributes:
 
             validAttr = True if attribute in attrList else False
@@ -79,8 +79,8 @@ class MyHTMLParser(HTMLParser):
 
 
     def handle_endtag(self, tag):
-        print "Encountered an end tag:", tag
-        print "Last opened tag was: ", self.openedTag[-1]
+        #print "Encountered an end tag:", tag
+        #print "Last opened tag was: ", self.openedTag[-1]
 
         matchFound = False
 
