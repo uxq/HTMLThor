@@ -57,10 +57,11 @@ class MyHTMLParser(HTMLParser):
         # print "Encountered a start tag:", tag
         self.openedTag.append(tag);
 
-        # Check attributes
+        line, offset = self.getpos()
 
+        # Check attributes
         attrList = sql.getAttr(tag.lower())
-        
+
         for attribute, value in attributes:
 
             validAttr = True if attribute in attrList else False
@@ -69,13 +70,13 @@ class MyHTMLParser(HTMLParser):
                 validAttr = True
                     
             if (not validAttr):
-                error = {'line': 1, 'column': 1, 'message' : attribute + " " + sql.getErrMsg(22), 'type': tag}
+                error = {'line': line, 'column': offset, 'message' : attribute + " " + sql.getErrMsg(22), 'type': tag}
                 self.syntaxErrors.append(error)
-                debugError = {'line': 1, 'column': 1, 'message' : "Not a valid attribute("+attribute+")", 'type': "practice"}
+                debugError = {'line': line, 'column': offset, 'message' : "Not a valid attribute("+attribute+")", 'type': "practice"}
                 self.practiceErrors.append(debugError) 
             elif (sql.isDeprecatedAttribute(attribute)):
-                error = {'line': 1, 'column': 1, 'message' : sql.getErrMsg(30).replace("--attr",attribute).replace("--tag",tag), 'type': "deprecated"}
-                self.deprecatedErrors.append(error) 
+                error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(30).replace("--attr",attribute).replace("--tag",tag), 'type': "deprecated"}
+                self.deprecatedErrors.append(error)
 
 
     def handle_endtag(self, tag):
@@ -83,6 +84,7 @@ class MyHTMLParser(HTMLParser):
         #print "Last opened tag was: ", self.openedTag[-1]
 
         matchFound = False
+        line, offset = self.getpos()
 
         #Look for tag. If tag isn't closed (no match is found), mark as error on tag.
 
@@ -93,7 +95,7 @@ class MyHTMLParser(HTMLParser):
                     self.requiredTags.append(tag.lower())
                 matchFound = True
             else:
-                error = {'line': 1, 'column': 0, 'message' : self.openedTag[-1] + ' not closed...', 'type': "syntax"}
+                error = {'line': line, 'column': offset, 'message' : self.openedTag[-1] + ' not closed...', 'type': "syntax"}
                 self.syntaxErrors.append(error)
                 # matchFound = True
         
