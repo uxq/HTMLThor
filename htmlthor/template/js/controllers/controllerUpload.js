@@ -10,15 +10,15 @@ htmlthorApp.controller('UploadController', function ($location, $http, $scope, U
 	$scope.userDirect = "";
 	$scope.validUrl = "false";
 
-	console.log("Upload Controller loaded.");
+	//console.log("Upload Controller loaded.");
 	
 	$scope.isValidUrl = function() {
-		console.log("Checking if valid url using", $scope.userUrl);
+		//console.log("Checking if valid url using", $scope.userUrl);
 		//^(http|https|ftp)?(:\/\/)?(www|ftp)?.?[a-z0-9-]+(.|:)([a-z0-9-]+)+([\/?].*)?$
 		// var regexp = /^(http|https|ftp)?(:\/\/)?(www|ftp)?.?[a-z0-9-]+(.|:)([a-z0-9-]+)+([\/?].*)?$/;
 		// var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
 		var regexp = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!10(?:\.\d{1,3}){3})(?!127(?:\.\d{1,3}){3})(?!169\.254(?:\.\d{1,3}){2})(?!192\.168(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]+-?)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/[^\s]*)?$/i;
-		console.log("Testing result: ", regexp.test($scope.userUrl));
+		//console.log("Testing result: ", regexp.test($scope.userUrl));
 		return regexp.test($scope.userUrl);   
 	}
 	
@@ -58,9 +58,9 @@ htmlthorApp.controller('UploadController', function ($location, $http, $scope, U
                     file: file
                 }).progress(function (evt) {
                     var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                    console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
+                    //console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
                 }).success(function (data, status, headers, config) {
-                    console.log('file ' + config.file.name + 'uploaded. Response: ' + data);
+                    //console.log('file ' + config.file.name + 'uploaded. Response: ' + data);
             		resultsService.setResults(data);
             		$scope.redirectToResults();
                 });
@@ -130,7 +130,7 @@ htmlthorApp.controller('UploadController', function ($location, $http, $scope, U
 		
 		submitButton.click(function() {
 			if(directInput.val().length == 0) {
-				console.log("Nothing entered...");
+				//console.log("Nothing entered...");
 				return;
 			}
 			$scope.submitDirectInput(directInput.val());
@@ -140,9 +140,9 @@ htmlthorApp.controller('UploadController', function ($location, $http, $scope, U
 
 	$scope.submitIndividualUpload = function(file) {
 
-		console.log("File size is: " + file.size);
+		//console.log("File size is: " + file.size);
 		if(file.size > 10000) {
-			console.log("File size maybe a bit too big?");
+			//console.log("File size maybe a bit too big?");
 		}
 		
 		var reader = new FileReader();
@@ -239,7 +239,7 @@ htmlthorApp.controller('UploadController', function ($location, $http, $scope, U
 	}
 	
 	$scope.redirectToResults = function() {
-		console.log("Redirecting to results page...");
+		//console.log("Redirecting to results page...");
 		$location.path('/results');
 		$scope.$apply();
 	}

@@ -1,7 +1,3 @@
-$(document).ready(function() {
-    console.log("Document Has Loaded!");
-});
-
 var htmlthorApp = angular.module('htmlthorApp', ['ngRoute', 'ui.router', 'ngSanitize', 'ngFileUpload']);
 
 htmlthorApp.config(function($stateProvider, $locationProvider, $urlRouterProvider) {
@@ -49,7 +45,7 @@ htmlthorApp.filter('trustHtml', function ($sce) {
 });
 
 htmlthorApp.controller('MainController', function($scope, $state) {
-	console.log("Loaded main controller!");
+	//console.log("Loaded main controller!");
 	$scope.state = $state;
 });
 
@@ -58,12 +54,12 @@ htmlthorApp.service('resultsService', function() {
 	var currentResults = [];
 	
 	var setResults = function(newResults) {
-		console.log("Setting current results", newResults);
+		//console.log("Setting current results", newResults);
 		currentResults = newResults;
 	}
 	
 	var getResults = function() {
-		console.log("Getting results", currentResults);
+		//console.log("Getting results", currentResults);
 		return currentResults;
 	}
 	

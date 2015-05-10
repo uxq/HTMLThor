@@ -1,9 +1,13 @@
 htmlthorApp.controller('ResultsController', function ($scope, resultsService) {
 
-    console.log("Results Controller loaded.");
+    //console.log("Results Controller loaded.");
+
+    //console.log(resultsService.getResults());
 	
 	$scope.loadedEverything = false;
 	
+	$scope.currentResults = resultsService.getResults();
+
 	$scope.totalSyntax = 0;
 	$scope.totalSemantic = 0;
 	$scope.totalDeprecated = 0;
@@ -14,8 +18,6 @@ htmlthorApp.controller('ResultsController', function ($scope, resultsService) {
 	
 	$scope.areMultipleFiles = false;
 	
-	$scope.currentResults = {
-	}
 	
 	$scope.multipleFiles = [];	
 	
@@ -358,7 +360,7 @@ htmlthorApp.controller('ResultsController', function ($scope, resultsService) {
 	
 	$scope.isThisActiveFile = function(numberToCheck) {
 	
-		console.log("Active file is:", $scope.activeFile);
+		//console.log("Active file is:", $scope.activeFile);
 		if (numberToCheck == $scope.activeFile) return true;
 		else return false;
 	
@@ -366,7 +368,7 @@ htmlthorApp.controller('ResultsController', function ($scope, resultsService) {
 	
 	$scope.setActiveFile = function(numberToSet) {
 	
-		console.log("Set active file!!!", numberToSet);
+		//console.log("Set active file!!!", numberToSet);
 	
 		$scope.activeFile = numberToSet;
 		$scope.currentResults = $scope.multipleFiles[numberToSet];
@@ -392,7 +394,7 @@ htmlthorApp.controller('ResultsController', function ($scope, resultsService) {
 	
 	$scope.sanitizeSource = function() {
 	
-		console.log("Before sanitization", $scope.multipleFiles);
+		//console.log("Before sanitization", $scope.multipleFiles);
 		
 		for (var j = 0; j < $scope.multipleFiles.length; j++) {
 			var sourceCodeLength = $scope.multipleFiles[j].sourceCode.length;
@@ -403,7 +405,7 @@ htmlthorApp.controller('ResultsController', function ($scope, resultsService) {
 			
 		}
 			
-		console.log("After sanitization", $scope.multipleFiles);
+		//console.log("After sanitization", $scope.multipleFiles);
 		
 		generateSourceSection($scope.multipleFiles);
 		
@@ -411,7 +413,7 @@ htmlthorApp.controller('ResultsController', function ($scope, resultsService) {
 	
 	$scope.getStoredResults = function() {
 		$scope.multipleFiles = resultsService.getResults();
-		console.log("@#@Data to be used for results:", $scope.multipleFiles);
+		//console.log("@#@Data to be used for results:", $scope.multipleFiles);
 		//$scope.multipleFiles = $scope.oldFiles; // !!! REMOVE THIS !!!
 	}
 	
@@ -464,13 +466,14 @@ function unescapeHtml(htmlToUnescape) {
 		var htmlElements = [["<","&lt;"],[">","&gt;"],["\"","&quot;"],["\'","&#39;"]];
 		for(var j=0; j<htmlElements.length; j++) {
 			reg = new RegExp(htmlElements[j][1], "gi");
+			if (htmlToUnescape)
 			htmlToUnescape = htmlToUnescape.replace(reg,htmlElements[j][0]);
 		}
 		return htmlToUnescape;
 }
 
 function generateSourceSection(sourceFiles) {
-	console.log("Aww yeah buddy, I'm populating the source code section!", sourceFiles);
+	//console.log("Aww yeah buddy, I'm populating the source code section!", sourceFiles);
 	var sourceCodeContainer = $("#sourceCodeContainer");
 	var listContainer = $("#template--sourceCode").find(".template");
 	var listItem = $("#template--sourceCode-line").find(".template");
@@ -603,11 +606,11 @@ function handleSourceErrors(sourceFiles) {
 				var startCol = queryResult[j].source[q].column - 1;
 				var endCol = queryResult[j].source[q].end - 1;
 				
-				console.log("%%DEBUGGING: Start: " + startCol + " End: " + endCol);
+				//console.log("%%DEBUGGING: Start: " + startCol + " End: " + endCol);
 				
-				var startString = newSourceLine.substring(0, startCol);
-				var middleString = newSourceLine.substring(startCol, endCol);
-				var endString = newSourceLine.substring(endCol);
+				var startString = newSourceLine ? newSourceLine.substring(0, startCol) : '';
+				var middleString = newSourceLine ? newSourceLine.substring(startCol, endCol) : '';
+				var endString = newSourceLine ? newSourceLine.substring(endCol) : '';
 				
 				var beginningSpan = "<span class='errorType--" + queryResult[j].source[q].type +"'>";
 				var endSpan = "</span>"
@@ -643,12 +646,12 @@ function handleSourceErrors(sourceFiles) {
 		}
 		
 		sourceWithErrors.push(errorsWithHighlights);
-		console.log("Full errors with their codes: ", errorsWithHighlights);
+		//console.log("Full errors with their codes: ", errorsWithHighlights);
 		
 		
 	}
 	
-	console.log("I'm handling the source errors!", sourceWithErrors);
+	//console.log("I'm handling the source errors!", sourceWithErrors);
 	
 	return sourceWithErrors;
 }

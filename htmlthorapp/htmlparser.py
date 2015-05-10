@@ -70,8 +70,8 @@ class MyHTMLParser(HTMLParser):
                 validAttr = True
                     
             if (not validAttr):
-                error = {'line': line, 'column': offset, 'message' : attribute + " " + sql.getErrMsg(22), 'type': tag}
-                self.syntaxErrors.append(error)
+                #error = {'line': line, 'column': offset, 'message' : attribute + " " + sql.getErrMsg(22), 'type': tag}
+                #self.syntaxErrors.append(error)
                 debugError = {'line': line, 'column': offset, 'message' : "Not a valid attribute("+attribute+")", 'type': "practice"}
                 self.practiceErrors.append(debugError) 
             elif (sql.isDeprecatedAttribute(attribute)):
@@ -85,6 +85,7 @@ class MyHTMLParser(HTMLParser):
 
         matchFound = False
         line, offset = self.getpos()
+        sql = SqlFunctions();
 
         #Look for tag. If tag isn't closed (no match is found), mark as error on tag.
 
@@ -98,7 +99,11 @@ class MyHTMLParser(HTMLParser):
                 error = {'line': line, 'column': offset, 'message' : self.openedTag[-1] + ' not closed...', 'type': "syntax"}
                 self.syntaxErrors.append(error)
                 # matchFound = True
-        
+
+            if(sql.isDeprecated(tag)):
+                error = {'line': lineNum+1, 'column': endTagColumnNo, 'message' : sql.getErrMsg(29).replace("--element", tag), 'type': "deprecated"}
+                self.deprecatedErrors.append(error)
+
             del self.openedTag[-1]
 
     def handle_data(self, data):
@@ -133,6 +138,8 @@ class MyHTMLParser(HTMLParser):
     def parse(self, htmlString):
         
         self.feed(htmlString)
+
+        return
 
         prevTag = ""
         tagStartSet = False

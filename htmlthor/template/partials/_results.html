@@ -17,28 +17,28 @@
 					<div class="resultPreview--syntax resultPreview" data-ng-class="{ 'state-active' : totalSyntax != 0 }">
 						<h5>Syntax</h5>
 						<div class="divider"></div>
-						<div class="bigCount font--heading">{{ totalSyntax }}</div>
+						<div class="bigCount font--heading">{{currentResults.syntaxErrors.length}}</div>
 					</div>
 				</li>
 				<li>
 					<div class="resultPreview--semantic resultPreview" data-ng-class="{ 'state-active' : totalSemantic != 0 }">
 						<h5>Semantic</h5>
 						<div class="divider"></div>
-						<div class="bigCount font--heading">{{ totalSemantic }}</div>
+						<div class="bigCount font--heading">{{currentResults.semanticErrors.length}}</div>
 					</div>
 				</li>
 				<li>
 					<div class="resultPreview--deprecated resultPreview" data-ng-class="{ 'state-active' : totalDeprecated != 0 }">
 						<h5>Deprecated</h5>
 						<div class="divider"></div>
-						<div class="bigCount font--heading">{{ totalDeprecated }}</div>
+						<div class="bigCount font--heading">{{currentResults.deprecatedErrors.length }}</div>
 					</div>
 				</li>
 				<li>
 					<div class="resultPreview--practice resultPreview" data-ng-class="{ 'state-active' : totalPractice != 0 }">
 						<h5>Best Practice</h5>
 						<div class="divider"></div>
-						<div class="bigCount font--heading">{{ totalPractice }}</div>
+						<div class="bigCount font--heading">{{currentResults.practiceErrors.length}}</div>
 					</div>
 				</li>
 			</ul>
