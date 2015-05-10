@@ -25,6 +25,8 @@ class SqlFunctions:
             attrList = list()
             for attr in Attribute.objects.filter(element = Element.objects.get(ename=tagName).id):
                 attrList.append(attr.aname)
+            for attr in Attribute.objects.filter(element = 0):
+                attrList.append(attr.aname)
             return attrList
         except:
             return list()

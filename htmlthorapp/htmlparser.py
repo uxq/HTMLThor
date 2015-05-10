@@ -78,6 +78,21 @@ class MyHTMLParser(HTMLParser):
                 error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(30).replace("--attr",attribute).replace("--tag",tag), 'type': "deprecated"}
                 self.deprecatedErrors.append(error)
 
+            if(sql.isAttrBool(attribute)):
+                # this type of attribute cannot have a value
+                error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(41).replace("-attr", attribute), 'type': "syntax"} #change from endAttr
+                self.syntaxErrors.append(error)
+                                            
+                # check for unique id
+                if (attribute.lower() == "id"):
+                    for idVal in ids:
+                        if(idVal.lower()==value): 
+                            # error for duplicate id
+                            error = {'line': line, 'column': offset, 'message' : attributeVal + sql.getErrMsg(41), 'type': "semantic"} #change from endAttr
+                            self.semanticErrors.append(error)
+                        else:
+                            ids.append(attributeVal)
+
 
     def handle_endtag(self, tag):
         #print "Encountered an end tag:", tag
@@ -92,9 +107,35 @@ class MyHTMLParser(HTMLParser):
         while (len(self.openedTag) > 0 and not matchFound):
 
             if (self.openedTag[-1] == tag.lower()):
+                matchFound = True
                 if(tag.lower() in ["html", "head", "body", "!doctype", "title", "meta", "main", "base"]):                                 
                     self.requiredTags.append(tag.lower())
-                matchFound = True
+                    if(tag.lower() == "main"):
+                        error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(47)}
+                        self.practiceErrors.append(error)
+                    #Check singular tags
+                    if(not tag.lower() == "meta"): 
+                        if(tag.lower() in self.singularTags):
+                            
+                            if (tag.lower()=="!doctype"):
+                                error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(8), 'type': "semantic"}
+                            elif (tag.lower()=="html"):
+                                error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(9), 'type': "semantic"}
+                            elif (tag.lower()=="head"):
+                                error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(10), 'type': "semantic"}
+                            elif (tag.lower()=="title"):
+                                error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(11), 'type': "semantic"}
+                            elif (tag.lower()=="body"):
+                                error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(16), 'type': "semantic"}
+                            elif (tag.lower()=="main"):
+                                error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(46), 'type': "semantic"}
+                            elif (tag.lower()=="base"):
+                                error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(45), 'type': "semantic"}
+                            
+                            self.semanticErrors.append(error)
+                        else:
+                            self.singularTags.append(tag.lower())
+
             else:
                 error = {'line': line, 'column': offset, 'message' : self.openedTag[-1] + ' not closed...', 'type': "syntax"}
                 self.syntaxErrors.append(error)
