@@ -48,14 +48,18 @@ class MyHTMLParser(HTMLParser):
         self.tagChecked = False
         self.faultyTag = False
 
+    prevTag = ""
+
     # Andy's stuff
 
     def handle_starttag(self, tag, attributes):
 
         sql = SqlFunctions();
 
+        prevTag = self.openedTag[-1]
+
         # print "Encountered a start tag:", tag
-        self.openedTag.append(tag);
+        self.openedTag.append(tag)
 
         line, offset = self.getpos()
 
@@ -92,6 +96,11 @@ class MyHTMLParser(HTMLParser):
                             self.semanticErrors.append(error)
                         else:
                             ids.append(attributeVal)
+
+            # Check if tag and tag before tag are br tag
+            if(prevTag.lower()=="br" and tag.lower()=="br"):
+                error = {'line': lineNum+1, 'column': endTagColumnNo, 'message' : sql.getErrMsg(37), 'type': "semantic"}
+                self.semanticErrors.append(error)
 
 
     def handle_endtag(self, tag):
@@ -136,13 +145,47 @@ class MyHTMLParser(HTMLParser):
                         else:
                             self.singularTags.append(tag.lower())
 
+                # Error messages for values that are not deprecated, but best practice asks they not be used
+                if(tag.lower() == "s"):
+                    error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(24), 'type': "practice"}
+                    self.practiceErrors.append(error)
+                
+                if(tag.lower() == "i"):
+                    error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(25), 'type': "practice"}
+                    self.practiceErrors.append(error)
+
+                if(tag.lower() == "b"):
+                    error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(26), 'type': "practice"}
+                    self.practiceErrors.append(error)
+                
+                if(tag.lower() == "u"):
+                    error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(27), 'type': "practice"}
+                    self.practiceErrors.append(error)
+
             else:
                 error = {'line': line, 'column': offset, 'message' : self.openedTag[-1] + ' not closed...', 'type': "syntax"}
                 self.syntaxErrors.append(error)
                 # matchFound = True
 
             if(sql.isDeprecated(tag)):
-                error = {'line': lineNum+1, 'column': endTagColumnNo, 'message' : sql.getErrMsg(29).replace("--element", tag), 'type': "deprecated"}
+                error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(29).replace("--element", tag), 'type': "deprecated"}
+                self.deprecatedErrors.append(error)
+
+
+            # If it is not a valid tag
+            if(not sql.checkValidTag(tag)): 
+                if(tag.lower() == "!doctype"):
+                    self.requiredTags.append(tag)
+                elif (tag.lower() == "doctype"):
+                    error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(2), 'type': "syntax"}
+                    self.syntaxErrors.append(error)
+                else:
+                    error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(18).replace("--tag",tag), 'type': "syntax"}
+                    self.syntaxErrors.append(error)
+                        
+            # If it a deprecated tag
+            elif(sql.isDeprecated(tag)):
+                error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(29).replace("--element", tag), 'type': "deprecated"}
                 self.deprecatedErrors.append(error)
 
             del self.openedTag[-1]
