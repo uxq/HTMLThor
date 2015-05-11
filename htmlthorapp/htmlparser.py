@@ -52,11 +52,23 @@ class MyHTMLParser(HTMLParser):
 
     # Andy's stuff
 
+    def handle_decl(self, decl):
+
+        line, offset = self.getpos()
+        sql = SqlFunctions()
+
+        if (not decl == "html"):
+            error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(2), 'type': "syntax"}
+            self.syntaxErrors.append(error)
+
     def handle_starttag(self, tag, attributes):
 
-        sql = SqlFunctions();
+        sql = SqlFunctions()
 
-        prevTag = self.openedTag[-1]
+        if (len(self.openedTag) > 0):
+            prevTag = self.openedTag[-1]
+        else:
+            prevTag = ""
 
         # print "Encountered a start tag:", tag
         self.openedTag.append(tag)
@@ -99,7 +111,7 @@ class MyHTMLParser(HTMLParser):
 
             # Check if tag and tag before tag are br tag
             if(prevTag.lower()=="br" and tag.lower()=="br"):
-                error = {'line': lineNum+1, 'column': endTagColumnNo, 'message' : sql.getErrMsg(37), 'type': "semantic"}
+                error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(37), 'type': "semantic"}
                 self.semanticErrors.append(error)
 
 
@@ -163,7 +175,7 @@ class MyHTMLParser(HTMLParser):
                     self.practiceErrors.append(error)
 
             else:
-                error = {'line': line, 'column': offset, 'message' : self.openedTag[-1] + ' not closed...', 'type': "syntax"}
+                error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(55).replace("--element", tag), 'type': "deprecated"}
                 self.syntaxErrors.append(error)
                 # matchFound = True
 
