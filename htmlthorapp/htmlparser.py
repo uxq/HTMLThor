@@ -38,6 +38,7 @@ class MyHTMLParser(HTMLParser):
 
         self.openedTag = list()
         self.closedTag = list()
+        self.hasDoctype = False
 
     def closeTheTag(self):
         self.openDoctype = False
@@ -56,6 +57,8 @@ class MyHTMLParser(HTMLParser):
 
         line, offset = self.getpos()
         sql = SqlFunctions()
+
+        self.hasDoctype = True
 
         if (not decl == "DOCTYPE html"):
             error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(2), 'type': "syntax"}
@@ -239,8 +242,14 @@ class MyHTMLParser(HTMLParser):
 
 
     def parse(self, htmlString):
+
+        sql = SqlFunctions();
         
         self.feed(htmlString)
+
+        if(not self.hasDoctype):
+            error = {'line': 1, 'column': 0, 'message' : sql.getErrMsg(3), 'type': "syntax"}
+            self.syntaxErrors.append(error)
 
         return
 
