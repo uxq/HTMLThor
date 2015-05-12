@@ -40,6 +40,7 @@ class MyHTMLParser(HTMLParser):
         self.openedTag = list()
         self.closedTag = list()
         self.hasDoctype = False
+        self.doctypeCount = 0
 
     def closeTheTag(self):
         self.openDoctype = False
@@ -60,6 +61,10 @@ class MyHTMLParser(HTMLParser):
         sql = SqlFunctions()
 
         self.hasDoctype = True
+        self.doctypeCount = self.doctypeCount + 1
+
+        if (line > 1):
+            self.hasDoctype = False
 
         if (not decl.lower().replace(" ", "") == "doctypehtml"):
             error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(2), 'type': "syntax"}
@@ -267,6 +272,11 @@ class MyHTMLParser(HTMLParser):
         if(not self.hasDoctype):
             error = {'line': 1, 'column': 0, 'message' : sql.getErrMsg(3), 'type': "syntax"}
             self.syntaxErrors.append(error)
+
+        if(self.doctypeCount > 1):
+            error = {'line': 1, 'column': 0, 'message' : sql.getErrMsg(8), 'type': "syntax"}
+            self.syntaxErrors.append(error)
+
 
         # Add any errors for required tags not being present
         if("html" not in self.requiredTags):
