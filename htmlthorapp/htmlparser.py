@@ -106,12 +106,14 @@ class MyHTMLParser(HTMLParser):
                     error = {'line': line, 'column': offset, 'message' : "Invalid charactes used in value", 'type': "syntax"} #change from endAttr
                     self.syntaxErrors.append(error)
 
-                    
             if (not validAttr):
                 #error = {'line': line, 'column': offset, 'message' : attribute + " " + sql.getErrMsg(22), 'type': tag}
                 #self.syntaxErrors.append(error)
                 debugError = {'line': line, 'column': offset, 'message' : "Not a valid attribute("+attribute+")", 'type': "practice"}
                 self.practiceErrors.append(debugError) 
+            # lang is valid tag for html as in http://www.w3.org/TR/html5/semantics.html
+            elif (attribute.lower() == "lang" and tag.lower() == "html"):
+                validAttr = True
             elif (sql.isDeprecatedAttribute(attribute)):
                 error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(30).replace("--attr",attribute).replace("--tag",tag), 'type': "deprecated"}
                 self.deprecatedErrors.append(error)
@@ -135,6 +137,8 @@ class MyHTMLParser(HTMLParser):
         if(prevTag.lower()=="br" and tag.lower()=="br"):
             error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(37), 'type': "semantic"}
             self.semanticErrors.append(error)
+
+
 
 
     def handle_endtag(self, tag):
