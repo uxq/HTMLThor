@@ -191,28 +191,37 @@ htmlthorApp.controller('UploadController', function ($location, $http, $scope, U
 		console.log("I'm going to submit the following: ", dataToSend);
 		$scope.setSiteLoading();
 		//boop
-		
-		$.ajax({
-		  type: "POST",
-		  url: urlToUse,
-		  contentType: false,
-		  // dataType: "json",
-			//contentType:"multipart/form-data",
-		  data: dataToSend,
-		  success: function(data){
-			console.log("!!!!!!!!Submitted successfully!", data);
-			$("body").addClass("state--receivedResults");
-			$scope.removeSiteLoading();
+
+		$http.post('/thorpedoDirect/',{
+			data: {
+				body: directCode
+			}
+		}).success(function(data){
 			resultsService.setResults(data);
-			$scope.redirectToResults();
-			// time to change to the results page
-		  },
-		  error: function(data) {
-			console.log("@@@Failed to send / do stuff", data);
-			$scope.removeSiteLoading();
-		  }
-		  // dataType: dataType
-		});
+            $scope.redirectToResults();
+		})
+		
+		// $.ajax({
+		//   type: "POST",
+		//   url: urlToUse,
+		//   contentType: false,
+		//   // dataType: "json",
+		// 	//contentType:"multipart/form-data",
+		//   data: dataToSend,
+		//   success: function(data){
+		// 	console.log("!!!!!!!!Submitted successfully!", data);
+		// 	$("body").addClass("state--receivedResults");
+		// 	$scope.removeSiteLoading();
+		// 	resultsService.setResults(data);
+		// 	$scope.redirectToResults();
+		// 	// time to change to the results page
+		//   },
+		//   error: function(data) {
+		// 	console.log("@@@Failed to send / do stuff", data);
+		// 	$scope.removeSiteLoading();
+		//   }
+		//   // dataType: dataType
+		// });
 			
 		// $http({
 		// url: urlToUse,

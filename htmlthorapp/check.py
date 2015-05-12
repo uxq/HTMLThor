@@ -73,7 +73,7 @@ def checkUrl(data):
 def checkDirect(data):
     totalErrors = list()
     errors = initialiseErrors("Direct")
-    parser = HTMLParser()
+    parser = MyHTMLParser()
     parser.parse(str(data))
     errors['syntaxErrors'] = parser.syntaxErrors
     errors['semanticErrors'] = parser.semanticErrors
