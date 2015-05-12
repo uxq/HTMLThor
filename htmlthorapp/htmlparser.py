@@ -57,7 +57,7 @@ class MyHTMLParser(HTMLParser):
         line, offset = self.getpos()
         sql = SqlFunctions()
 
-        if (not decl == "html"):
+        if (not decl == "DOCTYPE html"):
             error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(2), 'type': "syntax"}
             self.syntaxErrors.append(error)
 
@@ -71,7 +71,8 @@ class MyHTMLParser(HTMLParser):
             prevTag = ""
 
         # print "Encountered a start tag:", tag
-        self.openedTag.append(tag)
+        if (sql.isSelfClosing(tag.lower()) == False):
+            self.openedTag.append(tag)
 
         line, offset = self.getpos()
 
@@ -119,14 +120,20 @@ class MyHTMLParser(HTMLParser):
         #print "Encountered an end tag:", tag
         #print "Last opened tag was: ", self.openedTag[-1]
 
+        sql = SqlFunctions();
         matchFound = False
         line, offset = self.getpos()
-        sql = SqlFunctions();
 
+        if (sql.isSelfClosing(tag.lower())):
+            return 0
+        
         #Look for tag. If tag isn't closed (no match is found), mark as error on tag.
 
         while (len(self.openedTag) > 0 and not matchFound):
 
+            #selfClosing = sql.isSelfClosing(tag)
+            #if (not selfClosing):
+            
             if (self.openedTag[-1] == tag.lower()):
                 matchFound = True
                 if(tag.lower() in ["html", "head", "body", "!doctype", "title", "meta", "main", "base"]):                                 
