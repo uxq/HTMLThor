@@ -106,6 +106,10 @@ class MyHTMLParser(HTMLParser):
                     error = {'line': line, 'column': offset, 'message' : "Invalid charactes used in value", 'type': "syntax"} #change from endAttr
                     self.syntaxErrors.append(error)
 
+            if (validAttr and attribute.lower() == "alt" and len(value.replace(" ", "")) < 2):
+                error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(36), 'type': "practice"}
+                self.practiceErrors.append(error)
+
             if (not validAttr):
                 #error = {'line': line, 'column': offset, 'message' : attribute + " " + sql.getErrMsg(22), 'type': tag}
                 #self.syntaxErrors.append(error)
