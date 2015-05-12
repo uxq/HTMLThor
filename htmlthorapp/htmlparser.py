@@ -84,6 +84,11 @@ class MyHTMLParser(HTMLParser):
 
         for attribute, value in attributes:
 
+            #check for charset existance
+            if(tag.lower() == "meta" and attribute.lower() == "charset" and value.lower() == "utf-8"): 
+                self.requiredTags.append(tag.lower())
+                break
+
             validAttr = True if attribute in attrList else False
                                               
             if (attribute[0:5].lower() == "data-"):
@@ -113,10 +118,10 @@ class MyHTMLParser(HTMLParser):
                         else:
                             ids.append(attributeVal)
 
-            # Check if tag and tag before tag are br tag
-            if(prevTag.lower()=="br" and tag.lower()=="br"):
-                error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(37), 'type': "semantic"}
-                self.semanticErrors.append(error)
+        # Check if tag and tag before tag are br tag
+        if(prevTag.lower()=="br" and tag.lower()=="br"):
+            error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(37), 'type': "semantic"}
+            self.semanticErrors.append(error)
 
 
     def handle_endtag(self, tag):
@@ -126,6 +131,8 @@ class MyHTMLParser(HTMLParser):
         sql = SqlFunctions();
         matchFound = False
         line, offset = self.getpos()
+
+        requiredClosingTags = ["html", "head", "body", "!doctype", "title", "meta", "main", "base"]
 
         if (sql.isSelfClosing(tag.lower())):
             return 0
@@ -139,33 +146,33 @@ class MyHTMLParser(HTMLParser):
             
             if (self.openedTag[-1] == tag.lower()):
                 matchFound = True
-                if(tag.lower() in ["html", "head", "body", "!doctype", "title", "meta", "main", "base"]):                                 
+                if(tag.lower() in requiredClosingTags):                                 
                     self.requiredTags.append(tag.lower())
                     if(tag.lower() == "main"):
                         error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(47)}
                         self.practiceErrors.append(error)
+                    
                     #Check singular tags
-                    if(not tag.lower() == "meta"): 
-                        if(tag.lower() in self.singularTags):
-                            
-                            if (tag.lower()=="!doctype"):
-                                error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(8), 'type': "semantic"}
-                            elif (tag.lower()=="html"):
-                                error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(9), 'type': "semantic"}
-                            elif (tag.lower()=="head"):
-                                error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(10), 'type': "semantic"}
-                            elif (tag.lower()=="title"):
-                                error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(11), 'type': "semantic"}
-                            elif (tag.lower()=="body"):
-                                error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(16), 'type': "semantic"}
-                            elif (tag.lower()=="main"):
-                                error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(46), 'type': "semantic"}
-                            elif (tag.lower()=="base"):
-                                error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(45), 'type': "semantic"}
-                            
-                            self.semanticErrors.append(error)
-                        else:
-                            self.singularTags.append(tag.lower())
+                    if(tag.lower() in self.singularTags):
+                        
+                        if (tag.lower()=="!doctype"):
+                            error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(8), 'type': "semantic"}
+                        elif (tag.lower()=="html"):
+                            error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(9), 'type': "semantic"}
+                        elif (tag.lower()=="head"):
+                            error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(10), 'type': "semantic"}
+                        elif (tag.lower()=="title"):
+                            error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(11), 'type': "semantic"}
+                        elif (tag.lower()=="body"):
+                            error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(16), 'type': "semantic"}
+                        elif (tag.lower()=="main"):
+                            error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(46), 'type': "semantic"}
+                        elif (tag.lower()=="base"):
+                            error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(45), 'type': "semantic"}
+                        
+                        self.semanticErrors.append(error)
+                    else:
+                        self.singularTags.append(tag.lower())
 
                 # Error messages for values that are not deprecated, but best practice asks they not be used
                 if(tag.lower() == "s"):
@@ -247,9 +254,32 @@ class MyHTMLParser(HTMLParser):
         
         self.feed(htmlString)
 
+        # final checks
+
         if(not self.hasDoctype):
             error = {'line': 1, 'column': 0, 'message' : sql.getErrMsg(3), 'type': "syntax"}
             self.syntaxErrors.append(error)
+
+        # Add any errors for required tags not being present
+        if("html" not in self.requiredTags):
+            error = {'line': 1, 'column': 0, 'message' : sql.getErrMsg(4), 'type': "syntax"}
+            self.syntaxErrors.append(error)
+
+        if("head" not in self.requiredTags):
+            error = {'line': 1, 'column': 0, 'message' : sql.getErrMsg(5), 'type': "syntax"}
+            self.syntaxErrors.append(error)
+            
+        if("body" not in self.requiredTags):
+            error = {'line': 1, 'column': 0, 'message' : sql.getErrMsg(7), 'type': "syntax"}
+            self.syntaxErrors.append(error)
+
+        if("title" not in self.requiredTags):
+            error = {'line': 1, 'column': 0, 'message' : sql.getErrMsg(6), 'type': "semantic"}
+            self.semanticErrors.append(error)
+
+        if("meta" not in self.requiredTags):
+            error = {'line': 1, 'column': 0, 'message' : sql.getErrMsg(32), 'type': "semantic"}
+            self.semanticErrors.append(error)
 
         return
 
