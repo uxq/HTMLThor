@@ -60,7 +60,7 @@ class MyHTMLParser(HTMLParser):
 
         self.hasDoctype = True
 
-        if (not decl == "DOCTYPE html"):
+        if (not decl.lower().replace(" ", "") == "doctypehtml"):
             error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(2), 'type': "syntax"}
             self.syntaxErrors.append(error)
 
