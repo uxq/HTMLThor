@@ -1,6 +1,7 @@
 from sql import SqlFunctions
 from encapsulation import Encapsulation
 from HTMLParser import HTMLParser
+import re
 
 class MyHTMLParser(HTMLParser):
     def __init__(self):
@@ -81,6 +82,7 @@ class MyHTMLParser(HTMLParser):
 
         # Check attributes
         attrList = sql.getAttr(tag.lower())
+        not_allowed_class_id = ['!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '.', '/', ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '`', '{', '|', '}', '~']
 
         for attribute, value in attributes:
 
@@ -93,6 +95,12 @@ class MyHTMLParser(HTMLParser):
                                               
             if (attribute[0:5].lower() == "data-"):
                 validAttr = True
+
+            if (validAttr and (attribute.lower() == "id" or attribute.lower() == "class")):
+                if(any(s in value for s in not_allowed_class_id)):
+                    error = {'line': line, 'column': offset, 'message' : "Invalid charactes used in value", 'type': "syntax"} #change from endAttr
+                    self.syntaxErrors.append(error)
+
                     
             if (not validAttr):
                 #error = {'line': line, 'column': offset, 'message' : attribute + " " + sql.getErrMsg(22), 'type': tag}
