@@ -192,13 +192,15 @@ htmlthorApp.controller('UploadController', function ($location, $http, $scope, U
 		$scope.setSiteLoading();
 		//boop
 
-		$http.post('/thorpedoDirect/',{
-			data: {
-				body: directCode
-			}
+		$http({
+		    method: 'POST',
+		    url: '/thorpedoDirect/',
+		    data: "body="+directCode,
+		    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 		}).success(function(data){
 			resultsService.setResults(data);
             $scope.redirectToResults();
+            $scope.removeSiteLoading();
 		})
 		
 		// $.ajax({

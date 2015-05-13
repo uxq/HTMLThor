@@ -23,12 +23,16 @@ def thorpedoFile(request):
         
 @csrf_exempt
 def thorpedoUrl(request):
-    if request.is_ajax() and request.method == 'POST':
-        errorData = check.checkUrl(request.FILES)
-        return HttpResponse(json.dumps(errorData), content_type="application/json")
+    return HttpResponse(json.dumps("error, no request"), content_type="application/json")
+    # if request.is_ajax() and request.method == 'POST':
+    #     errorData = check.checkUrl(request.FILES)
+    #     return HttpResponse(json.dumps(errorData), content_type="application/json")
 
 @csrf_exempt
 def thorpedoDirect(request):
-    if request.is_ajax() and request.method == 'POST':
-        errorData = check.checkDirect(request.body)
+    
+    if request.method == 'POST':
+        errorData = check.checkDirect(request.POST['body'])
         return HttpResponse(json.dumps(errorData), content_type="application/json")
+
+    return HttpResponse(json.dumps("error, no request"), content_type="application/json")
