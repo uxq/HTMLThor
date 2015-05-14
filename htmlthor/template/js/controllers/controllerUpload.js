@@ -48,6 +48,7 @@ htmlthorApp.controller('UploadController', function ($location, $http, $scope, U
 
 	$scope.upload = function (files) {
         if (files && files.length) {
+        	$scope.setSiteLoading();
             for (var i = 0; i < files.length; i++) {
                 var file = files[i];
                 $scope.setSiteLoading();
@@ -254,7 +255,7 @@ htmlthorApp.controller('UploadController', function ($location, $http, $scope, U
 	$scope.redirectToResults = function() {
 		//console.log("Redirecting to results page...");
 		$location.path('/results');
-		$scope.$apply();
+		//$scope.$apply();
 	}
 	
 	$scope.initUploadButton();

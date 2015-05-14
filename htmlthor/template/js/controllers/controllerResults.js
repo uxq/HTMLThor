@@ -413,7 +413,7 @@ htmlthorApp.controller('ResultsController', function ($scope, resultsService) {
 	
 	$scope.getStoredResults = function() {
 		$scope.multipleFiles = resultsService.getResults();
-		//console.log("@#@Data to be used for results:", $scope.multipleFiles);
+		console.log("@#@Data to be used for results:", $scope.multipleFiles);
 		//$scope.multipleFiles = $scope.oldFiles; // !!! REMOVE THIS !!!
 	}
 	
@@ -522,6 +522,8 @@ function generateSourceSection(sourceFiles) {
 				htmlErrorInfo.find(".sourceCodeErrorInfo-colEnd").html(sourceErrorsCalculated[i][j].errors[k].end);
 				
 				var errorType = sourceErrorsCalculated[i][j].errors[k].type;
+				console.log("What is the error type?: " + errorType);
+				console.log("i = " + i + ", j = " + j + " k = " + k);
 				var htmlErrorType = htmlErrorInfo.find(".errorType");
 				
 				switch(errorType) {
