@@ -1,3 +1,7 @@
+'''
+DEPRECATED - now using htmlparser2.py
+'''
+
 from sql import SqlFunctions
 from encapsulation import Encapsulation
 from HTMLParser import HTMLParser
@@ -115,8 +119,6 @@ class MyHTMLParser(HTMLParser):
                 self.practiceErrors.append(error)
 
             if (not validAttr):
-                #error = {'line': line, 'column': offset, 'message' : attribute + " " + sql.getErrMsg(22), 'type': tag}
-                #self.syntaxErrors.append(error)
                 debugError = {'line': line, 'column': offset, 'message' : "Not a valid attribute("+attribute+")", 'type': "practice"}
                 self.practiceErrors.append(debugError) 
             # lang is valid tag for html as in http://www.w3.org/TR/html5/semantics.html

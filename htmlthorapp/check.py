@@ -4,6 +4,7 @@ import uuid
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from htmlparser import MyHTMLParser
+from htmlparser2 import MyHTMLParserV2
 
 def checkFile(uploadFile, file_extension):
 
@@ -17,7 +18,7 @@ def checkFile(uploadFile, file_extension):
     #for fileObject in fileObjects:
 
     # Initialise a new parser from the HTMLParser class
-    parser = MyHTMLParser()
+    parser = MyHTMLParserV2()
     
     # Extract the extension from the file object
     #extension = os.path.splitext(fileObject)[-1].lower()
@@ -73,7 +74,7 @@ def checkUrl(data):
 def checkDirect(data):
     totalErrors = list()
     errors = initialiseErrors("Direct")
-    parser = MyHTMLParser()
+    parser = MyHTMLParserV2()
     parser.parse(str(data))
     errors['syntaxErrors'] = parser.syntaxErrors
     errors['semanticErrors'] = parser.semanticErrors
