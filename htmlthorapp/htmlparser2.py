@@ -236,6 +236,14 @@ class MyHTMLParserV2(HTMLParser):
             del self.openedTag[-1]
 
     def handle_data(self, data):
+
+        if (len(self.openedTag) > 0):
+            _tag = self.openedTag[-1]
+            if (_tag.tagName.lower() == "script"):
+                error = {'line': _tag.position[0], 'column': _tag.position[1], 'message' : "You shouldn't use inline JavaScript code, use a separate JavaScript file instead.", 'type': "practice"}
+                self.practiceErrors.append(error)
+
+
         return 0
         # print "Encountered some data  :", data
 
