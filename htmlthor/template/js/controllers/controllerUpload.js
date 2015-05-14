@@ -50,6 +50,7 @@ htmlthorApp.controller('UploadController', function ($location, $http, $scope, U
         if (files && files.length) {
             for (var i = 0; i < files.length; i++) {
                 var file = files[i];
+                $scope.setSiteLoading();
                 var extension = file.name.split(".");
                 extension = extension[extension.length-1];
                 Upload.upload({
@@ -63,6 +64,7 @@ htmlthorApp.controller('UploadController', function ($location, $http, $scope, U
                     //console.log('file ' + config.file.name + 'uploaded. Response: ' + data);
             		resultsService.setResults(data);
             		$scope.redirectToResults();
+            		$scope.removeSiteLoading();
                 });
             }
         }

@@ -110,6 +110,10 @@ class MyHTMLParser(HTMLParser):
                 error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(36), 'type': "practice"}
                 self.practiceErrors.append(error)
 
+            if (validAttr and attribute.lower() == "style"):
+                error = {'line': line, 'column': offset, 'message' : "You shouldn't use inline style, use a separate CSS file instead.", 'type': "practice"}
+                self.practiceErrors.append(error)
+
             if (not validAttr):
                 #error = {'line': line, 'column': offset, 'message' : attribute + " " + sql.getErrMsg(22), 'type': tag}
                 #self.syntaxErrors.append(error)
