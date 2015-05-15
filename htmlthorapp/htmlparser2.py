@@ -208,12 +208,12 @@ class MyHTMLParserV2(HTMLParser):
                     self.practiceErrors.append(error)
 
             else:
-                error = {'line': _tag.position[0], 'column': _tag.position[1], 'message' : sql.getErrMsg(55).replace("--element", tag), 'type': "deprecated"}
+                error = {'line': _tag.position[0], 'column': _tag.position[1], 'column_end': offset, 'message' : sql.getErrMsg(55).replace("--element", tag), 'type': "deprecated"}
                 self.syntaxErrors.append(error)
                 # matchFound = True
 
             if(sql.isDeprecated(tag)):
-                error = {'line': _tag.position[0], 'column': _tag.position[1], 'message' : sql.getErrMsg(29).replace("--element", tag), 'type': "deprecated"}
+                error = {'line': _tag.position[0], 'column': _tag.position[1], 'column_end': offset, 'message' : sql.getErrMsg(29).replace("--element", tag), 'type': "deprecated"}
                 self.deprecatedErrors.append(error)
 
 
@@ -222,15 +222,15 @@ class MyHTMLParserV2(HTMLParser):
                 if(tag.lower() == "!doctype"):
                     self.requiredTags.append(tag)
                 elif (tag.lower() == "doctype"):
-                    error = {'line': _tag.position[0], 'column': _tag.position[1], 'message' : sql.getErrMsg(2), 'type': "syntax"}
+                    error = {'line': _tag.position[0], 'column': _tag.position[1], 'column_end': offset, 'message' : sql.getErrMsg(2), 'type': "syntax"}
                     self.syntaxErrors.append(error)
                 else:
-                    error = {'line': _tag.position[0], 'column': _tag.position[1], 'message' : sql.getErrMsg(18).replace("--tag",tag), 'type': "syntax"}
+                    error = {'line': _tag.position[0], 'column': _tag.position[1], 'column_end': offset, 'message' : sql.getErrMsg(18).replace("--tag",tag), 'type': "syntax"}
                     self.syntaxErrors.append(error)
                         
             # If it a deprecated tag
             elif(sql.isDeprecated(tag)):
-                error = {'line': _tag.position[0], 'column': _tag.position[1], 'message' : sql.getErrMsg(29).replace("--element", tag), 'type': "deprecated"}
+                error = {'line': _tag.position[0], 'column': _tag.position[1], 'column_end': offset, 'message' : sql.getErrMsg(29).replace("--element", tag), 'type': "deprecated"}
                 self.deprecatedErrors.append(error)
 
             del self.openedTag[-1]
