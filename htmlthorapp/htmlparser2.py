@@ -82,6 +82,10 @@ class MyHTMLParserV2(HTMLParser):
         attrList = sql.getAttr(tag.lower())
         not_allowed_class_id = ['!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '.', '/', ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '`', '{', '|', '}', '~']
 
+        styleHasRel = False
+        styleHasType = False
+        scriptHasType = False
+
         for attribute, value in attributes:
 
             #check for charset existance
@@ -102,6 +106,13 @@ class MyHTMLParserV2(HTMLParser):
             if (validAttr and attribute.lower() == "alt" and len(value.replace(" ", "")) < 2):
                 error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(36), 'type': "practice"}
                 self.practiceErrors.append(error)
+
+            if (tag.lower() == "link" and (validAttr and attribute.lower() == "rel")):
+                styleHasRel = True
+            if (tag.lower() == "link" and (validAttr and attribute.lower() == "type")):
+                styleHasType = True
+            if (tag.lower() == "script" and (validAttr and attribute.lower() == "type")):
+                scriptHasType = True
 
             if (validAttr and attribute.lower() == "style"):
                 error = {'line': line, 'column': offset, 'message' : "You shouldn't use inline style, use a separate CSS file instead.", 'type': "practice"}
@@ -136,6 +147,14 @@ class MyHTMLParserV2(HTMLParser):
         if(prevTag.lower()=="br" and tag.lower()=="br"):
             error = {'line': line, 'column': offset, 'message' : sql.getErrMsg(37), 'type': "semantic"}
             self.semanticErrors.append(error)
+
+        if(tag.lower() == "link" and (not styleHasRel or not styleHasType)):
+            error = {'line': line, 'column': offset, 'message' : "This link tag does not have rel and/or type attributes. Make sure it looks like <link href='style.css' rel='stylesheet' type='text/css' />", 'type': "syntax"}
+            self.syntaxErrors.append(error)
+
+        if(tag.lower() == "script" and (not scriptHasType)):
+            error = {'line': line, 'column': offset, 'message' : "Make sure you specify the type of your script by adding the type attribute to this tag.", 'type': "syntax"}
+            self.syntaxErrors.append(error)
 
 
     def handle_endtag(self, tag):
