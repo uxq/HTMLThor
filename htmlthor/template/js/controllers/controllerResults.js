@@ -525,8 +525,6 @@ function generateSourceSection(sourceFiles) {
 				htmlErrorInfo.find(".sourceCodeErrorInfo-colEnd").html(sourceErrorsCalculated[i][j].errors[k].end);
 				
 				var errorType = sourceErrorsCalculated[i][j].errors[k].type;
-				console.log("What is the error type?: " + errorType);
-				console.log("i = " + i + ", j = " + j + " k = " + k);
 				var htmlErrorType = htmlErrorInfo.find(".errorType");
 				
 				switch(errorType) {
@@ -563,6 +561,9 @@ function generateSourceSection(sourceFiles) {
 		sourceCodeContainer.append(htmlListContainer);
 		
 	}
+
+	// TODO: Need this to init scrollbar
+	//initSourceScrollbar();
 	
 }
 
@@ -676,6 +677,143 @@ function initHelpExplanation() {
 
 
 
+/*
+ *
+ *	Scrollbar...
+
+	When the user scrolls, change from
+
+ *
+ */
+
+// Code from: http://stackoverflow.com/a/9617517
 
 
+function initSourceScrollbar() {
 
+	var scrollTimer, lastScrollFireTime = 0;
+
+	initScrollingAbility();
+
+	$(window).on('scroll', function() {
+
+	    var minScrollTime = 100;
+	    var now = new Date().getTime();
+
+	    function processScroll() {
+	        var sourceContainer = $("#sourceCodeContainer");
+	        if(isScrolledIntoView(sourceContainer)) {
+	        	$("body").addClass("state-sourceOnScreen");
+	        } else {
+	        	$("body").removeClass("state-sourceOnScreen");
+	        }
+	    }
+
+	    if (!scrollTimer) {
+	        if (now - lastScrollFireTime > (3 * minScrollTime)) {
+	            processScroll();   // fire immediately on first scroll
+	            lastScrollFireTime = now;
+	        }
+	        scrollTimer = setTimeout(function() {
+	            scrollTimer = null;
+	            lastScrollFireTime = new Date().getTime();
+	            processScroll();
+	        }, minScrollTime);
+	    }
+	});
+
+}
+
+// Code from: http://stackoverflow.com/a/488073 
+function isScrolledIntoView(elem)
+{
+    var $elem = $(elem);
+    var $window = $(window);
+
+    var docViewTop = $window.scrollTop();
+    var docViewBottom = docViewTop + $window.height();
+
+    var elemTop = $elem.offset().top;
+    var elemBottom = elemTop + $elem.height();
+
+    return (((elemBottom + 60) <= docViewBottom));
+}
+
+// draggable slider
+
+function initScrollingAbility() {
+
+	calculateScrollingProperties();
+
+	var knob = $("#scrollKnob");
+	var bar = $("#scrollBar");
+
+	var heldDown = false;
+
+	knob.mousedown(function(e){
+		heldDown = true;
+		
+	});
+
+	$("body").mouseup(function(){
+		heldDown = false;
+	});
+
+	$("body").mousemove(function(e) {
+		if(heldDown) {
+			var knobWidth = knob.width();
+			var barWidth = bar.width();
+			newPosition = e.pageX;
+			leftOffset = bar.offset().left;
+			finalPosition = newPosition - leftOffset;
+			if(finalPosition > (barWidth - knobWidth)) {
+				finalPosition = barWidth - knobWidth;
+			}
+			knob.css("left", finalPosition);
+		}
+	});
+
+	// $("#scrollKnob").draggable({
+	// 	axis : "x"
+	// 	// drag: function() {
+	// 	// 	var offset = $(this).offset();
+	// 	// 	var xPos = offset.left;
+	// 	// }
+	// });
+
+}
+
+function calculateScrollingProperties() {
+
+	var sourceCodeContainer = $("#sourceCodeContainer");
+	var resultsSourceSection = $("#resultsSourceSection");
+
+	var originalWidth = sourceCodeContainer.width();
+
+	resultsSourceSection.css("position", "absolute");
+
+	var fullWidth = sourceCodeContainer.width();
+
+	resultsSourceSection.css("position", "relative");
+
+	if(fullWidth > originalWidth) {
+		setScrollingProperties(fullWidth, originalWidth);
+		$("body").addClass("needSourceScroll");
+	} else {
+		$("body").removeClass("needSourceScroll");
+	}
+
+}
+
+function setScrollingProperties(fullWidth, originalWidth) {
+
+	var knob = $("#scrollKnob");
+	var bar = $("#scrollBar");
+
+	var knobWidth = originalWidth / fullWidth * 100;
+
+	knob.css("width", knobWidth + "%");
+
+	console.log("Set bar width to " + knobWidth + "%");
+
+}

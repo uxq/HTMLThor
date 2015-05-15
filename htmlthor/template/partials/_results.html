@@ -236,7 +236,7 @@
 			</ul>
 		</section>
 	</section>
-	<section class="resultsSectionTitle marginTop-50">
+	<section id="resultsSourceSection" class="resultsSectionTitle resultsSourceSection marginTop-50">
 		<h4>Source Code</h4>
 		<div class="fileSelectBox" data-ng-show="areMultipleFiles">
 			<select data-ng-model="currentResults" data-ng-options="file.fileName for file in multipleFiles">
@@ -265,7 +265,12 @@
 				Do the same with the errors list.
 			-->
 		</div>
-		<div id="sourceCodeScroll" class="sourceCodeScroll">HIDDEN SCROLLBAR</div>
+		<div id="sourceCodeScroll" class="sourceCodeScroll noselect">
+			<div class="scrollWrapper">
+				<div id="scrollKnob" class="knob"></div>
+				<div id="scrollBar" class="bar"></div>
+			</div>
+		</div>
 	</section>
 	<section class="resultsSectionTitle marginTop-50" style="display:none;">
 		<!-- <h4>Feedback</h4> -->

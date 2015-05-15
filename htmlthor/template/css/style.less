@@ -113,6 +113,15 @@ img {
     text-overflow: ellipsis;
 }
 
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 /*
  *
  *  States
@@ -1176,7 +1185,6 @@ strong {
 	padding: 15px;
 	border-radius: 4px;
 	box-shadow: 0 0 1px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.06);
-	margin-bottom: 400px;
  }
  
  .list-sourceCode {
@@ -1436,9 +1444,20 @@ strong {
 	line-height: 1.4em;
 }
 
-.sourceCodeContainer:hover + .sourceCodeScroll,
-.sourceCodeScroll:hover {
-	//display: block; //
+.resultsSourceSection {
+	position: relative;
+	padding-bottom: 40px;
+	margin-bottom: 400px;
+}
+
+.needSourceScroll {
+
+	.resultsSourceSection:hover .sourceCodeScroll,
+	.sourceCodeContainer:hover + .sourceCodeScroll,
+	.sourceCodeScroll:hover {
+		display: block;
+	}
+
 }
 
 .sourceCodeScroll {
@@ -1447,8 +1466,46 @@ strong {
 	bottom: 10px;
 	width: 100%;
 	max-width: 700px;
-	height: 30px;
-	background-color: red;	
+	height: 16px;
+
+	.scrollWrapper {
+		position: relative;
+		margin: 0 8px;	
+	}
+
+	.bar {
+		width: 100%;
+		height: 16px;
+		border-radius: 8px;
+		background-color: rgba(0,0,0,0.25);
+	}
+
+	.knob {
+		min-width: 32px;
+		width: 32px;
+		height: 16px;
+		border-radius: 8px;
+		position: absolute;
+		top: 0;
+		left: 0;
+		background-color: rgba(0,0,0,0.4);
+		cursor: pointer;
+
+		&:hover {
+			background-color: rgba(0,0,0,0.5);		
+		}
+
+		&:active {
+			background-color: rgba(0,0,0,0.6);
+		}
+
+	}
+
+}
+
+.state-sourceOnScreen .sourceCodeScroll {
+	position: absolute;
+	bottom: 20px;
 }
  
  
