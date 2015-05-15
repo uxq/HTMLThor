@@ -17,7 +17,9 @@ htmlthorApp.controller('ResultsController', function ($scope, resultsService) {
 	$scope.activeFile = 0;
 	
 	$scope.areMultipleFiles = false;
-	
+
+	// add class for when results exist on the site.
+	$("body").addClass("state-resultsExist");	
 	
 	$scope.multipleFiles = [];	
 	
@@ -449,6 +451,7 @@ htmlthorApp.controller('ResultsController', function ($scope, resultsService) {
 	$scope.prepCounts();
 	$scope.setActiveFile(0); // important
 	$scope.sanitizeSource();
+	initHelpExplanation();
 	// $scope.calculateTotalErrorCounts();
 
 });
@@ -658,22 +661,18 @@ function handleSourceErrors(sourceFiles) {
 	return sourceWithErrors;
 }
 
-/*
+function initHelpExplanation() {
+	console.log("Initiated help section");
 
-	So. With the source code section.
+	$(".resultPreview-help").click(function() {
+		$("#explanationSection").slideDown();
+	});
 	
-	Need to work out how to only show the selected file...
-	
-	Need to work out how to highlight errors within the code
-	
-		Search through all of the errors belonging to that file, group them by line number
-		
-		Go through each line number.
-		
-		Start highlighting the errors.
+	$("#explanation-close").click(function() {
+		$("#explanationSection").slideUp();
+	});
 
-
- */
+}
 
 
 

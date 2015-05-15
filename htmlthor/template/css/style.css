@@ -271,6 +271,9 @@ strong {
 .list-siteNav a:hover {
   color: #666;
 }
+.state-resultsExist .siteNav-results {
+  display: block;
+}
 .siteNav-results {
   display: none;
 }
@@ -973,6 +976,15 @@ button:focus,
   font-style: italic;
   line-height: 1.4em;
 }
+.sourceCodeScroll {
+  display: none;
+  position: fixed;
+  bottom: 10px;
+  width: 100%;
+  max-width: 700px;
+  height: 30px;
+  background-color: red;
+}
 .extraHelp h4 {
   margin-bottom: 10px;
 }
@@ -1039,9 +1051,144 @@ button:focus,
   color: #AAA;
   text-shadow: 0 1px #FFF;
 }
+.explanationSection {
+  margin: 30px 0;
+}
+.explanationSection h3 {
+  margin-left: 5px;
+}
+.explanationContainer {
+  margin-top: 6px;
+  background-color: #F0F0F0;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #f0f0f0), color-stop(1, #f4f4f4));
+  background-image: -o-linear-gradient(bottom, #f0f0f0 0%, #f4f4f4 100%);
+  background-image: -moz-linear-gradient(bottom, #f0f0f0 0%, #f4f4f4 100%);
+  background-image: -webkit-linear-gradient(bottom, #f0f0f0 0%, #f4f4f4 100%);
+  background-image: -ms-linear-gradient(bottom, #f0f0f0 0%, #f4f4f4 100%);
+  background-image: linear-gradient(to bottom, #f0f0f0 0%, #f4f4f4 100%);
+  border: 1px solid #FAFAFA;
+  border-top-color: #FFF;
+  box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.14);
+  border-radius: 5px;
+  max-width: 520px;
+  position: relative;
+}
+.explanation-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 24px;
+  height: 24px;
+  text-align: center;
+  line-height: 24px;
+  font-family: "Open Sans", Helvetica, Arial, sans-serif;
+  font-weight: bold;
+  color: #BBB;
+  text-shadow: 0 1px #FFF;
+  cursor: pointer;
+}
+.explanation-close:hover {
+  color: #999;
+}
+.explanation-close:active {
+  color: #666;
+}
+.explanationBlock {
+  padding: 20px;
+  width: 50%;
+  min-height: 150px;
+}
+.explanationBlock p {
+  line-height: 1.3em;
+  font-size: .9em;
+}
+.explanationSection {
+  display: none;
+}
+.explanationBlock-title {
+  font-family: "Open Sans", Helvetica, Arial, sans-serif;
+  font-weight: 600;
+  margin-bottom: 6px;
+  text-shadow: 0 1px #FFF;
+  color: #AAA;
+}
+.explanationBlock-title span {
+  background-color: #DADADA;
+  display: inline-block;
+  padding: 4px 6px;
+  border-radius: 5px;
+  color: #FFF;
+  text-shadow: 0 1px rgba(0, 0, 0, 0.14);
+  margin-right: 3px;
+}
+.explanationBlock-title .colour--syntax {
+  background-color: #f93459;
+}
+.explanationBlock-title .colour--semantic {
+  background-color: #0081ff;
+}
+.explanationBlock-title .colour--practice {
+  background-color: #ff9115;
+}
+.explanationBlock-title .colour--deprecated {
+  background-color: #9800ff;
+}
+.colour--syntax {
+  background-color: #f93459;
+}
+.colour--semantic {
+  background-color: #0081ff;
+}
+.colour--practice {
+  background-color: #ff9115;
+}
+.colour--deprecated {
+  background-color: #9800ff;
+}
+.extraInfo {
+  margin-top: 60px;
+  padding-top: 60px;
+  border-top: 1px solid #E9E9E9;
+}
+.extraInfo-title {
+  font-style: italic;
+  font-size: 1.3em;
+  font-weight: 300;
+  color: #BBB;
+  margin-bottom: 20px;
+}
+.infoBlocksList > li {
+  margin-top: 30px;
+}
+.infoBlock {
+  max-width: 450px;
+}
+.infoBlock-blob {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 16px;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgba(255, 255, 255, 0.2)), color-stop(1, rgba(0, 0, 0, 0)));
+  background-image: -o-linear-gradient(bottom, rgba(255, 255, 255, 0.2) 0%, rgba(0, 0, 0, 0) 100%);
+  background-image: -moz-linear-gradient(bottom, rgba(255, 255, 255, 0.2) 0%, rgba(0, 0, 0, 0) 100%);
+  background-image: -webkit-linear-gradient(bottom, rgba(255, 255, 255, 0.2) 0%, rgba(0, 0, 0, 0) 100%);
+  background-image: -ms-linear-gradient(bottom, rgba(255, 255, 255, 0.2) 0%, rgba(0, 0, 0, 0) 100%);
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.2) 0%, rgba(0, 0, 0, 0) 100%);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+.infoBlock-info h3 {
+  margin: 8px 0;
+  text-shadow: 0 1px #FFF;
+}
+.infoBlock-info p {
+  color: #999;
+  line-height: 1.4em;
+  font-size: .9em;
+  margin-bottom: 5px;
+}
 /*
  *
- *	Mobile Styling
+ *	Mobile Stylinggg
  *
  */
 /* Smartphones (portrait and landscape) ----------- */

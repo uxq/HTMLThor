@@ -11,10 +11,43 @@
 				<div class="type--practice barGraph-stat floatLeft"></div>
 			</div>
 		</div> -->
+		<section id="explanationSection" class="explanationSection">
+			<div>
+				<h3>What's What?</h3>
+				<div class="explanationContainer clearfix">
+					<div id="explanation-close" class="explanation-close">x</div>
+					<div class="explanationBlock floatLeft">
+						<div class="explanationBlock-title"><span class="colour--syntax">Syntax</span> Errors</div>
+						<p>
+							A syntax error can be caused by something as simple as a typo! An example of a syntactic error in your code is forgetting to close a tag with a &gt; symbol or mistyping a letter, &lt;jead&gt; instead of &lt;head&gt; for example
+						</p>
+					</div>
+					<div class="explanationBlock floatLeft">
+						<div class="explanationBlock-title"><span class="colour--semantic">Semantic</span> Errors</div>
+						<p>
+							Semantic errors are one step above 'best practice' errors. A semantic error involves using a tag in the wrong way, for example, using &lt;br&gt; tags to make new lines instead of using &lt;li&gt; tags.
+						</p>
+					</div>
+					<div class="explanationBlock floatLeft">
+						<div class="explanationBlock-title"><span class="colour--practice">Best Practice</span> Errors</div>
+						<p>
+							Don't overlook these errors! Caused when your code is syntactically correct, but it's been done in a very undesirable manner, best practice errors are important to attend to for clean code.
+						</p>
+					</div>
+					<div class="explanationBlock floatLeft">
+						<div class="explanationBlock-title"><span class="colour--deprecated">Deprecated</span> Errors</div>
+						<p>
+							The deprecated tag error is caused when you use a tag or attribute that was once validly used in HTML but no longer is. An example of this is using a &lt;strike&gt; tag instead of using the new &lt;del&gt;
+						</p>
+					</div>
+				</div>
+			</div>
+		</section>
 		<section class="resultsOverviewWrapper">
 			<ul class="list-resultsOverview clearfix">
 				<li>
 					<div class="resultPreview--syntax resultPreview" data-ng-class="{ 'state-active' : totalSyntax != 0 }">
+						<div class="resultPreview-help">?</div>
 						<h5>Syntax</h5>
 						<div class="divider"></div>
 						<div class="bigCount font--heading">{{currentResults.syntaxErrors.length}}</div>
@@ -22,6 +55,7 @@
 				</li>
 				<li>
 					<div class="resultPreview--semantic resultPreview" data-ng-class="{ 'state-active' : totalSemantic != 0 }">
+						<div class="resultPreview-help">?</div>
 						<h5>Semantic</h5>
 						<div class="divider"></div>
 						<div class="bigCount font--heading">{{currentResults.semanticErrors.length}}</div>
@@ -29,6 +63,7 @@
 				</li>
 				<li>
 					<div class="resultPreview--deprecated resultPreview" data-ng-class="{ 'state-active' : totalDeprecated != 0 }">
+						<div class="resultPreview-help">?</div>
 						<h5>Deprecated</h5>
 						<div class="divider"></div>
 						<div class="bigCount font--heading">{{currentResults.deprecatedErrors.length }}</div>
@@ -36,6 +71,7 @@
 				</li>
 				<li>
 					<div class="resultPreview--practice resultPreview" data-ng-class="{ 'state-active' : totalPractice != 0 }">
+						<div class="resultPreview-help">?</div>
 						<h5>Best Practice</h5>
 						<div class="divider"></div>
 						<div class="bigCount font--heading">{{currentResults.practiceErrors.length}}</div>
@@ -229,6 +265,7 @@
 				Do the same with the errors list.
 			-->
 		</div>
+		<div id="sourceCodeScroll" class="sourceCodeScroll">HIDDEN SCROLLBAR</div>
 	</section>
 	<section class="resultsSectionTitle marginTop-50" style="display:none;">
 		<!-- <h4>Feedback</h4> -->
