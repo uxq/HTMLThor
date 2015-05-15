@@ -508,3 +508,7 @@ e =  Element(ename="wbr",isDeprecated=False,isSelfClosing=True,isSingular=False,
 						isMeta=False,isHeadElement=False,isFormElement=False,
 						isTableElement=False,isTableContainer=False,isTableSingular=False)
 e.save()
+e =  Element(ename="strong",isDeprecated=False,isSelfClosing=False,isSingular=False,
+						isMeta=False,isHeadElement=False,isFormElement=False,
+						isTableElement=False,isTableContainer=False,isTableSingular=False)
+e.save()
