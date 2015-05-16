@@ -35,21 +35,13 @@ class ThorFile(ThorFolder):
 
 def checkFile(uploadFile, file_extension):
 
-    #(this_file_name, this_file_extension) = os.path.splitext(filename)
-
     file = default_storage.save('tmp/'+uuid.uuid4().hex+"."+file_extension, ContentFile(uploadFile.read()))
-    #fileObject = os.path.join(settings.MEDIA_ROOT, path)
 
     totalErrors = list()
-
-    #for fileObject in fileObjects:
 
     # Initialise a new parser from the HTMLParser class
     parser = MyHTMLParserV2()
     fileObject = open(file, 'r')
-    
-    # Extract the extension from the file object
-    #extension = os.path.splitext(fileObject)[-1].lower()
 
     # If it is a single file, simply parse it
     # Treat a .php file the same as a .html file
@@ -104,8 +96,6 @@ def checkFile(uploadFile, file_extension):
                 currentFolder = ThorFolder()
                 currentFolder.name = name
 
-        # totalErrors.append()
-
         for file in allZipFiles:
             
             name = file.filename
@@ -125,21 +115,10 @@ def checkFile(uploadFile, file_extension):
                     totalErrors.append(errors)
                 except KeyError:
                     continue
-                # else:
-                    # errors = initialiseErrors(fileObject)
-                    # data = fileObject.read()
-                    # # This function parses the file and places the results in its class variables
-                    # parser.parse(data)
-                    # # These variables are then extracted into the errors framework from initialiseErrors()
-                    # errors['syntaxErrors'] = parser.syntaxErrors
-                    # errors['semanticErrors'] = parser.semanticErrors
-                    # errors['deprecatedErrors'] = parser.deprecatedErrors
-                    # errors['practiceErrors'] = parser.practiceErrors
-                    # totalErrors.append(errors)
 
         return { "structure": [ob.as_json() for ob in zipStructure], "errors": totalErrors }
 
-    return totalErrors
+    return { "errors": totalErrors }
 
 def checkUrl(data):
     return
@@ -155,7 +134,7 @@ def checkDirect(data):
     errors['practiceErrors'] = parser.practiceErrors
     errors['sourceCode'] = str(data).splitlines()
     totalErrors.append(errors)
-    return totalErrors
+    return { "errors": totalErrors }
 
 def initialiseErrors(fileObject):
     errors = { 'fileName':fileObject,
