@@ -74,7 +74,7 @@ htmlthorApp.controller('ResultsController', function ($scope, resultsService) {
 		return htmlToEscape;
 	}
 	
-	$scope.sanitizeSource = function() {
+	$scope.sanitizeSource = function() { 
 	
 		//console.log("Before sanitization", $scope.multipleFiles);
 		
@@ -95,6 +95,8 @@ htmlthorApp.controller('ResultsController', function ($scope, resultsService) {
 	
 	$scope.getStoredResults = function() {
 		$scope.multipleFiles = resultsService.getResults();
+
+		console.log("Data being used for results: ", $scope.multipleFiles);
 	
 		if($scope.multipleFiles.length > 1) {
 		
