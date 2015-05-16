@@ -16,7 +16,11 @@ def index(request):
 def thorpedoFile(request):
 
     if request.method == 'POST':
-        errorData = check.checkFile(request.FILES['file'], request.POST['file_extension'])
+        errorData = list()
+        print request.FILES
+        for filename, file in request.FILES.iteritems():
+            extension = request.FILES[filename].name.split(".")
+            errorData.append(check.checkFile(request.FILES[filename], extension[-1]))
         return HttpResponse(json.dumps(errorData), content_type="application/json")
 
     return HttpResponse(json.dumps("error, no request"), content_type="application/json")
