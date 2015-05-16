@@ -609,7 +609,46 @@ function getZipResults() {
 						"name" : "plugins",
 						"extension" : "",
 						"type" : "folder",
-						"children" : [],
+						"children" : [
+							{
+								"name" : "random.css",
+								"extension" : "css",
+								"type" : "file",
+								"children" : [],
+								"broken" : false,
+								"brokenCount" : 0,
+								"locationBad" : false,
+							},
+							{
+								"name" : "anotherFolder",
+								"extension" : "",
+								"type" : "folder",
+								"children" : [
+									{
+										"name" : "deeper",
+										"extension" : "",
+										"type" : "folder",
+										"children" : [
+											{
+												"name" : "randomFile.doc",
+												"extension" : "doc",
+												"type" : "file",
+												"children" : [],
+												"broken" : false,
+												"brokenCount" : 0,
+												"locationBad" : false,
+											}
+										],
+										"broken" : false,
+										"brokenCount" : 0,
+										"locationBad" : false,
+									},
+								],
+								"broken" : false,
+								"brokenCount" : 0,
+								"locationBad" : false,
+							},
+						],
 						"broken" : false,
 						"brokenCount" : 0,
 						"locationBad" : false,
@@ -636,11 +675,19 @@ function generateZipDisplay(zipData) {
 
 }
 
-function generateZipDisplayItem(zipItemData) {
-
-	console.log("Gonna create zip item with this data:", zipItemData);
+function generateZipDisplayItem(zipItemData, childLevel) {
 
 	var zipItem = $("#template--zip-item").find(".template").clone();
+
+	if(!childLevel) {
+		var childLevel = 0;
+	}
+
+	if(isOdd(childLevel)) {
+		zipItem.addClass("lightShade");
+	} else {
+		zipItem.addClass("darkShade");
+	}
 
 	zipItem.find(".zipItemName").html(zipItemData.name);
 
@@ -676,6 +723,9 @@ function generateZipDisplayItem(zipItemData) {
 	if(zipItemData.type == "folder") {
 		zipItem.find(".zipItem").addClass("folder");
 		zipItem.find(".zipItemIcon").addClass("icon-folder-open-empty");
+		if(zipItemData.children.length == 0) {
+			zipItem.find(".zipItem").addClass("emptyFolder");
+		}
 	} else {
 
 		switch(zipItemData.extension) {
@@ -702,11 +752,15 @@ function generateZipDisplayItem(zipItemData) {
 	if(zipItemData.children.length > 0) {
 		var zipItemChildren = zipItem.find(".zipItemChildren");
 		for(var i = 0; i < zipItemData.children.length; i++) {
-			var newZipItem = generateZipDisplayItem(zipItemData.children[i]);
+			var newZipItem = generateZipDisplayItem(zipItemData.children[i], (childLevel + 1));
 			zipItemChildren.append(newZipItem);
 		}
 	}
 
 	return zipItem;
 
+}
+
+function isOdd(num) {
+	return (num % 2) == 1;
 }

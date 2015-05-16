@@ -1175,6 +1175,14 @@ strong {
 
 	}
 
+	&.emptyFolder {
+
+		> .zipInfo > .zipItemChildren {
+			display: none;
+		}
+
+	}
+
 	&.error,
 	&.warning {
 
@@ -1243,7 +1251,7 @@ strong {
 	p {
 		font-size: .8em;
 
-		.locationSuggestion {
+		.locationSuggestiony {
 			background-color: #FFF;
 			padding: 2px 4px;
 			border-radius: 3px;
