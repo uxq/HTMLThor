@@ -112,6 +112,7 @@ def checkFile(uploadFile, file_extension):
                     errors['semanticErrors'] = parser.semanticErrors
                     errors['deprecatedErrors'] = parser.deprecatedErrors
                     errors['practiceErrors'] = parser.practiceErrors
+                    errors['sourceCode'] = str(data).splitlines()
                     totalErrors.append(errors)
                 except KeyError:
                     continue
