@@ -721,17 +721,17 @@ function generateZipDisplayItem(zipItemData, childLevel) {
 	if(zipItemData.locationBad) {
 		zipItem.find(".zipItem").addClass("warning");
 		switch(zipItemData.extension) {case "html":
-			case "css":
+			case ".css":
 				zipItem.find(".locationSuggestion").html("css/");
 				break;
-			case "js":
+			case ".js":
 				zipItem.find(".locationSuggestion").html("js/");
 				break;
-			case "jpg":
-			case "png":
-			case "gif":
-			case "jpeg":
-			case "bmp":
+			case ".jpg":
+			case ".png":
+			case ".gif":
+			case ".jpeg":
+			case ".bmp":
 				zipItem.find(".anOrA").html("n");
 				zipItem.find(".locationSuggestion").html("images/");
 				break;
@@ -752,17 +752,17 @@ function generateZipDisplayItem(zipItemData, childLevel) {
 	} else {
 
 		switch(zipItemData.extension) {
-			case "html":
-			case "css":
-			case "js":
-			case "php":
+			case ".html":
+			case ".css":
+			case ".js":
+			case ".php":
 				zipItem.find(".zipItemIcon").addClass("icon-file-code");
 				break;
-			case "jpg":
-			case "png":
-			case "gif":
-			case "jpeg":
-			case "bmp":
+			case ".jpg":
+			case ".png":
+			case ".gif":
+			case ".jpeg":
+			case ".bmp":
 				zipItem.find(".zipItemIcon").addClass("icon-file-image");
 				break;
 			default:
@@ -771,8 +771,6 @@ function generateZipDisplayItem(zipItemData, childLevel) {
 		}
 
 	}
-
-	console.log("Executing this zip iteam: ", zipItemData);
 
 	if(zipItemData.children && zipItemData.children.length > 0) {
 		var zipItemChildren = zipItem.find(".zipItemChildren");
