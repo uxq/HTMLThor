@@ -263,7 +263,7 @@ class MyHTMLParserV2(HTMLParser):
         if (len(self.openedTag) > 0):
             _tag = self.openedTag[-1]
             if (_tag.tagName.lower() == "script"):
-                error = {'line': _tag.position[0], 'column': _tag.position[1], 'message' : "You shouldn't use inline JavaScript code, use a separate JavaScript file instead.", 'type': "practice"}
+                error = {'line': _tag.position[0], 'column': _tag.position[1], 'message' : "Consider using a separate JavaScript file instead of script tags within your HTML, for easier manageability.", 'type': "practice"}
                 self.practiceErrors.append(error)
 
 
