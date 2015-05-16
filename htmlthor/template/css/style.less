@@ -1124,8 +1124,9 @@ strong {
 .zipVisual {
 	background-color: #FFF;
 	padding: 10px;
-	border-radius: 5px;
-	border: 1px solid #E8E8E8;
+	border-radius: 4px;
+	border: 1px solid #EAEAEA;
+	box-shadow: 0 3px 5px rgba(0, 0, 0, 0.04);
 
 	h4 {
 		margin: 6px 0 0 10px;
@@ -1169,6 +1170,7 @@ strong {
 
 		> .zipItemIcon {
 			background-color: #E2E2E2;
+			border-color: #D5D5D5;
 		}
 
 	}
@@ -1193,6 +1195,11 @@ strong {
 			.colour--syntax;
 			color: #FFF;
 			text-shadow: 0 1px rgba(0, 0, 0, 0.24);
+			border-color: #E12246;
+		}
+
+		.brokenMessage {
+			display: block;
 		}
 
 	}
@@ -1203,10 +1210,20 @@ strong {
 			.colour--practice;
 			color: #FFF;
 			text-shadow: 0 1px rgba(0, 0, 0, 0.24);
+			border-color: #E88A1F;
+		}
+
+		.locationMessage {
+			display: block;
 		}
 
 	}
 
+}
+
+.brokenMessage,
+.locationMessage {
+	display: none;
 }
 
 .zipMessage {
@@ -1226,7 +1243,7 @@ strong {
 	p {
 		font-size: .8em;
 
-		span {
+		.locationSuggestion {
 			background-color: #FFF;
 			padding: 2px 4px;
 			border-radius: 3px;

@@ -27,6 +27,10 @@ htmlthorApp.controller('ResultsController', function ($scope, resultsService) {
 
 	$scope.isZipFile = true; // return to false once design is finished
 
+	//tempt
+	$scope.zipResults = getZipResults();
+	generateZipDisplay($scope.zipResults);
+
 	// add class for when results exist on the site.
 	$("body").addClass("state-resultsExist");	
 	
@@ -506,5 +510,203 @@ function setScrollingProperties(fullWidth, originalWidth) {
 	knob.css("width", knobWidth + "%");
 
 	console.log("Set bar width to " + knobWidth + "%");
+
+}
+
+// temp
+
+function getZipResults() {
+	var tempZip = {
+		"structure" : [
+			{
+				"name" : "index.html",
+				"extension" : "html",
+				"type" : "file",
+				"children" : [],
+				"broken" : true,
+				"brokenCount" : 4,
+				"locationBad" : false,
+			},
+			{
+				"name" : "about.html",
+				"extension" : "html",
+				"type" : "file",
+				"children" : [],
+				"broken" : false,
+				"brokenCount" : 0,
+				"locationBad" : false,
+			},
+			{
+				"name" : "style.css",
+				"extension" : "css",
+				"type" : "file",
+				"children" : [],
+				"broken" : false,
+				"brokenCount" : 0,
+				"locationBad" : true,
+			},
+			{
+				"name" : "cool.jpg",
+				"extension" : "jpg",
+				"type" : "file",
+				"children" : [],
+				"broken" : false,
+				"brokenCount" : 0,
+				"locationBad" : true,
+			},
+			{
+				"name" : "images",
+				"extension" : "",
+				"type" : "folder",
+				"children" : [
+					{
+						"name" : "groovy.jpg",
+						"extension" : "jpg",
+						"type" : "file",
+						"children" : [],
+						"broken" : false,
+						"brokenCount" : 0,
+						"locationBad" : false,
+					},
+					{
+						"name" : "bg.jpg",
+						"extension" : "jpg",
+						"type" : "file",
+						"children" : [],
+						"broken" : false,
+						"brokenCount" : 0,
+						"locationBad" : false,
+					}
+				],
+				"broken" : false,
+				"brokenCount" : 0,
+				"locationBad" : false,
+			},
+			{
+				"name" : "css",
+				"extension" : "",
+				"type" : "folder",
+				"children" : [
+					{
+						"name" : "home.css",
+						"extension" : "css",
+						"type" : "file",
+						"children" : [],
+						"broken" : false,
+						"brokenCount" : 0,
+						"locationBad" : false,
+					},
+					{
+						"name" : "about.css",
+						"extension" : "css",
+						"type" : "file",
+						"children" : [],
+						"broken" : false,
+						"brokenCount" : 0,
+						"locationBad" : false,
+					},
+					{
+						"name" : "plugins",
+						"extension" : "",
+						"type" : "folder",
+						"children" : [],
+						"broken" : false,
+						"brokenCount" : 0,
+						"locationBad" : false,
+					},
+				],
+				"broken" : false,
+				"brokenCount" : 0,
+				"locationBad" : false,
+			},
+		]
+	};
+
+	return tempZip;
+}
+
+function generateZipDisplay(zipData) {
+
+	var zipList = $("#zipList");
+
+	for(var i = 0; i < zipData.structure.length; i++) {
+		var zipItem = generateZipDisplayItem(zipData.structure[i]);
+		zipList.append(zipItem);
+	}
+
+}
+
+function generateZipDisplayItem(zipItemData) {
+
+	console.log("Gonna create zip item with this data:", zipItemData);
+
+	var zipItem = $("#template--zip-item").find(".template").clone();
+
+	zipItem.find(".zipItemName").html(zipItemData.name);
+
+	if(zipItemData.broken) {
+		zipItem.find(".zipItem").addClass("error");
+		zipItem.find(".brokenCount").html(zipItemData.brokenCount);
+	}
+
+	if(zipItemData.locationBad) {
+		zipItem.find(".zipItem").addClass("warning");
+		switch(zipItemData.extension) {case "html":
+			case "css":
+				zipItem.find(".locationSuggestion").html("css/");
+				break;
+			case "js":
+				zipItem.find(".locationSuggestion").html("js/");
+				break;
+			case "jpg":
+			case "png":
+			case "gif":
+			case "jpeg":
+			case "bmp":
+				zipItem.find(".anOrA").html("n");
+				zipItem.find(".locationSuggestion").html("images/");
+				break;
+			default:
+				zipItem.find(".anOrA").html("n");
+				zipItem.find(".locationSuggestion").html("unknown???/");
+				break;
+		}
+	}
+
+	if(zipItemData.type == "folder") {
+		zipItem.find(".zipItem").addClass("folder");
+		zipItem.find(".zipItemIcon").addClass("icon-folder-open-empty");
+	} else {
+
+		switch(zipItemData.extension) {
+			case "html":
+			case "css":
+			case "js":
+			case "php":
+				zipItem.find(".zipItemIcon").addClass("icon-file-code");
+				break;
+			case "jpg":
+			case "png":
+			case "gif":
+			case "jpeg":
+			case "bmp":
+				zipItem.find(".zipItemIcon").addClass("icon-file-image");
+				break;
+			default:
+				zipItem.find(".zipItemIcon").addClass("icon-doc");
+				break;
+		}
+
+	}
+
+	if(zipItemData.children.length > 0) {
+		var zipItemChildren = zipItem.find(".zipItemChildren");
+		for(var i = 0; i < zipItemData.children.length; i++) {
+			var newZipItem = generateZipDisplayItem(zipItemData.children[i]);
+			zipItemChildren.append(newZipItem);
+		}
+	}
+
+	return zipItem;
 
 }
