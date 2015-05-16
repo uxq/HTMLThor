@@ -30,7 +30,7 @@ def checkFile(uploadFile, file_extension):
 
         fileObject = open(file, 'r')
 
-        errors = initialiseErrors(fileObject)
+        errors = initialiseErrors(uploadFile.name)
         """ Might need to open before reading file"""
         data = fileObject.read()
         # This function parses the file and places the results in its class variables
@@ -85,7 +85,7 @@ def checkDirect(data):
     return totalErrors
 
 def initialiseErrors(fileObject):
-    errors = { 'fileName':str(fileObject),
+    errors = { 'fileName':fileObject,
                'syntaxErrors':{},
                'semanticErrors':{},
                'deprecatedErrors':{},
