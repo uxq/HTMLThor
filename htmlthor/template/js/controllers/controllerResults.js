@@ -74,7 +74,7 @@ htmlthorApp.controller('ResultsController', function ($scope, resultsService) {
 		return htmlToEscape;
 	}
 	
-	$scope.sanitizeSource = function() {
+	$scope.sanitizeSource = function() { 
 	
 		//console.log("Before sanitization", $scope.multipleFiles);
 		
@@ -95,6 +95,8 @@ htmlthorApp.controller('ResultsController', function ($scope, resultsService) {
 	
 	$scope.getStoredResults = function() {
 		$scope.multipleFiles = resultsService.getResults();
+
+		console.log("Data being used for results: ", $scope.multipleFiles);
 	
 		if($scope.multipleFiles.length > 1) {
 		
@@ -722,6 +724,7 @@ function generateZipDisplayItem(zipItemData, childLevel) {
 
 	if(zipItemData.type == "folder") {
 		zipItem.find(".zipItem").addClass("folder");
+		zipItem.addClass("folder");
 		zipItem.find(".zipItemIcon").addClass("icon-folder-open-empty");
 		if(zipItemData.children.length == 0) {
 			zipItem.find(".zipItem").addClass("emptyFolder");
