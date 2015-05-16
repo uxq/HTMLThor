@@ -722,6 +722,7 @@ function generateZipDisplayItem(zipItemData, childLevel) {
 
 	if(zipItemData.type == "folder") {
 		zipItem.find(".zipItem").addClass("folder");
+		zipItem.addClass("folder");
 		zipItem.find(".zipItemIcon").addClass("icon-folder-open-empty");
 		if(zipItemData.children.length == 0) {
 			zipItem.find(".zipItem").addClass("emptyFolder");

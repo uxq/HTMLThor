@@ -9,6 +9,7 @@ htmlthorApp.controller('UploadController', function ($location, $http, $scope, $
 	$scope.userUrl = "http://www.";
 	$scope.userDirect = "";
 	$scope.validUrl = "false";
+	$scope.errorSubmitting = false;
 
 	//console.log("Upload Controller loaded.");
 	
@@ -77,6 +78,12 @@ htmlthorApp.controller('UploadController', function ($location, $http, $scope, $
         		resultsService.setResults(data);
         		$scope.redirectToResults();
         		$scope.removeSiteLoading();
+            }).error(function() {
+            	console.log("ERROR, SOMETHING WENT WRONG!");
+            	$("#input--uploadFiles").wrap('<form>').closest('form').get(0).reset();
+ 				$("#input--uploadFiles").unwrap();
+            	$scope.errorSubmitting = true;
+            	$scope.removeSiteLoading();
             });
 
 
@@ -142,7 +149,10 @@ htmlthorApp.controller('UploadController', function ($location, $http, $scope, $
 			resultsService.setResults(data);
             $scope.redirectToResults();
             $scope.removeSiteLoading();
-		})
+		}).error(function() {
+			$scope.errorSubmitting = true;
+        	$scope.removeSiteLoading();
+		});
 		
 	}
 	

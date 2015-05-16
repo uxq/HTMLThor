@@ -523,6 +523,13 @@ strong {
  
  }
 
+.submissionError {
+	.font--heading;  
+	margin-top: 20px;
+	font-weight: bold;
+	color: #F94164;
+}
+
  .siteWarning {
  	margin-top: 20px;
 
@@ -1150,12 +1157,26 @@ strong {
 		border-radius: 3px;
 	}
 
-	.lightShade {
-		background-color: #FCFCFC;
-	}
+	.folder {
 
-	.darkShade {
-		background-color: #F0F0F0;
+		&.lightShade {
+
+			> .zipItem > .zipInfo > .zipItemChildren {
+				background-color: #FFF;
+				border: 1px solid #EBEBEB;
+			}
+
+		}
+
+		&.darkShade {
+
+			> .zipItem > .zipInfo > .zipItemChildren {
+				background-color: #F7F7F7;
+				border: 1px solid #EBEBEB;
+			}
+			
+		}
+
 	}
 
 }
@@ -1251,7 +1272,7 @@ strong {
 	p {
 		font-size: .8em;
 
-		.locationSuggestiony {
+		.locationSuggestion {
 			background-color: #FFF;
 			padding: 2px 4px;
 			border-radius: 3px;
@@ -1300,7 +1321,10 @@ strong {
 
 .zipItemChildren {
 	display: none;
-	padding: 10px 30px 10px 0;
+	//padding: 10px 30px 10px 0;
+	margin-top: 12px;
+	padding: 1px 30px 5px 5px;
+	border-radius: 4px;
 }
 
 //       /
