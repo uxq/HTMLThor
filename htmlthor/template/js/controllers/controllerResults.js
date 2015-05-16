@@ -94,8 +94,12 @@ htmlthorApp.controller('ResultsController', function ($scope, resultsService) {
 	$scope.getStoredResults = function() {
 		var data = resultsService.getResults();
 		console.log("Using this data: ", data);
-		$scope.multipleFiles = data[0].errors;
-		if(data[0].structure) {
+		if(!data.errors) {
+			$scope.multipleFiles = data[0].errors;
+		} else {
+			$scope.multipleFiles = data.errors;
+		}
+		if(data[0] && data[0].structure) {
 			// this is a .zip upload
 			$scope.zipResults = data[0].structure;
 			generateZipDisplay($scope.zipResults);
@@ -377,7 +381,6 @@ function handleSourceErrors(sourceFiles) {
 }
 
 function initHelpExplanation() {
-	console.log("Initiated help section");
 
 	$(".resultPreview-help").click(function() {
 		$("#explanationSection").slideDown();
