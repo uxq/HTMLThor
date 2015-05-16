@@ -25,11 +25,9 @@ htmlthorApp.controller('ResultsController', function ($scope, resultsService) {
 	
 	$scope.areMultipleFiles = false;
 
-	$scope.isZipFile = true; // return to false once design is finished
+	$scope.isZipFile = false; // return to false once design is finished
 
 	//tempt
-	$scope.zipResults = getZipResults();
-	generateZipDisplay($scope.zipResults);
 
 	// add class for when results exist on the site.
 	$("body").addClass("state-resultsExist");	
@@ -94,9 +92,28 @@ htmlthorApp.controller('ResultsController', function ($scope, resultsService) {
 	}
 	
 	$scope.getStoredResults = function() {
-		$scope.multipleFiles = resultsService.getResults();
+		var data = resultsService.getResults();
+		console.log("Using this data: ", data);
+		$scope.multipleFiles = data[0].errors;
+		if(data[0].structure) {
+			// this is a .zip upload
+			$scope.zipResults = data[0].structure;
+			generateZipDisplay($scope.zipResults);
+			$scope.isZipFile = true;
+		}
+		
+		// if(data[0].structure) {
+		// 	console.log("This is a zip upload");
+		// 	// this is a .zip upload
+		// 	$scope.zipData = data[0].structure;
+		// 	$scope.multipleFiles = data[0].errors;
+		// } else {
+		// 	console.log("This is NOT a zip upload");
+		// 	$scope.multipleFiles = data;
+		// }
 
-		console.log("Data being used for results: ", $scope.multipleFiles);
+
+		console.log("Data being used for results: ", resultsService.getResults());
 	
 		if($scope.multipleFiles.length > 1) {
 		
@@ -670,8 +687,8 @@ function generateZipDisplay(zipData) {
 
 	var zipList = $("#zipList");
 
-	for(var i = 0; i < zipData.structure.length; i++) {
-		var zipItem = generateZipDisplayItem(zipData.structure[i]);
+	for(var i = 0; i < zipData.length; i++) {
+		var zipItem = generateZipDisplayItem(zipData[i]);
 		zipList.append(zipItem);
 	}
 
@@ -752,7 +769,9 @@ function generateZipDisplayItem(zipItemData, childLevel) {
 
 	}
 
-	if(zipItemData.children.length > 0) {
+	console.log("Executing this zip iteam: ", zipItemData);
+
+	if(zipItemData.children && zipItemData.children.length > 0) {
 		var zipItemChildren = zipItem.find(".zipItemChildren");
 		for(var i = 0; i < zipItemData.children.length; i++) {
 			var newZipItem = generateZipDisplayItem(zipItemData.children[i], (childLevel + 1));
