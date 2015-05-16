@@ -522,7 +522,29 @@ strong {
 	}
  
  }
+
+ .siteWarning {
+ 	margin-top: 20px;
+
+ 	h3 {
+ 		color: red;
+ 	}
+
+ }
  
+.sideWideMessage {
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	padding: 10px;
+	background-color: #FFF;
+	z-index: 200;
+	font-size: .75em;
+	text-align: center;
+	color: #AAA;
+}
+
  .maxWidthMedium {
 	width: 100%;
 	max-width: 800px;
@@ -1090,6 +1112,177 @@ strong {
 	}
 	
  }
+
+/////////
+/// ZIP STYLING
+/////////
+
+.zipOverview {
+	margin-top: 30px;
+}
+
+.zipVisual {
+	background-color: #FFF;
+	padding: 10px;
+	border-radius: 5px;
+	border: 1px solid #E8E8E8;
+
+	h4 {
+		margin: 6px 0 0 10px;
+	}
+
+	h6 {
+		font-size: .8em;
+		margin: 6px 0 10px 0;
+		max-width: 370px;
+		color: #BBB;
+		line-height: 1.3em;
+	}
+
+}
+
+.zipList {
+	
+	li {
+		margin-top: 7px;
+		padding: 5px;
+		border-radius: 3px;
+	}
+
+	.lightShade {
+		background-color: #FCFCFC;
+	}
+
+	.darkShade {
+		background-color: #F0F0F0;
+	}
+
+}
+
+.zipItem {
+	
+	&.folder {
+
+		> .zipInfo > .zipItemChildren {
+			display: block;
+		}
+
+		> .zipItemIcon {
+			background-color: #E2E2E2;
+		}
+
+	}
+
+	&.error,
+	&.warning {
+
+		.zipItemName {
+			color: #5B5B5B;
+  			font-weight: bold;		
+		}
+
+		.zipMessage {
+			display: block;
+		}
+
+	}
+
+	&.error {
+
+		.zipItemIcon {
+			.colour--syntax;
+			color: #FFF;
+			text-shadow: 0 1px rgba(0, 0, 0, 0.24);
+		}
+
+	}
+
+	&.warning {
+
+		.zipItemIcon {
+			.colour--practice;
+			color: #FFF;
+			text-shadow: 0 1px rgba(0, 0, 0, 0.24);
+		}
+
+	}
+
+}
+
+.zipMessage {
+	display: none;
+	margin: 10px 0 3px 0;
+	border: 1px solid #E3E3E3;
+	padding: 10px;
+	border-radius: 5px;
+
+	h5 {
+		font-size: .8em;
+		font-weight: bold;
+		margin-bottom: 8px;
+		color: #7C7C7C;
+	}
+
+	p {
+		font-size: .8em;
+
+		span {
+			background-color: #FFF;
+			padding: 2px 4px;
+			border-radius: 3px;
+			border: 1px solid #CBCBCB;
+			font-weight: bold;
+			color: #949494;
+		}
+
+	}
+
+	.clickToView {
+		margin-top: 5px;
+		cursor: pointer;
+		color: #AAA;
+		font-style: italic;
+		font-size: .8em;
+		display: inline-block;
+
+		&:hover {
+			text-decoration: underline;
+		}
+
+	}
+
+}
+
+.zipItemIcon {
+	width: 26px;
+	height: 26px;
+	text-align: center;
+	line-height: 26px;
+	background-color: #FFF;
+	border-radius: 5px;
+	margin-right: 5px;
+	display: inline-block;
+	border: 1px solid #F0F0F0;
+	font-size: .9em;
+}
+
+.zipItemName {
+	display: inline-block;
+	color: #AAA;
+	margin-top: 6px;
+	font-size: .8em;
+}
+
+.zipItemChildren {
+	display: none;
+	padding: 10px 30px 10px 0;
+}
+
+//       /
+/// END ZIP STYLING
+//       /
+
+
  
  .list-errors {
 	background-color: #FFF;

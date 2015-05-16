@@ -1,0 +1,538 @@
+<section class="body--home maxWidthMedium">
+	<section>
+		<div>
+			<h2 class="text--bigTitle">Your Results</h2>
+		</div>
+		<!-- <div class="barGraph_wrapper">
+			<div class="barGraph clearfix">
+				<div class="type--syntax barGraph-stat floatLeft"></div>
+				<div class="type--semantic barGraph-stat floatLeft"></div>
+				<div class="type--deprecated barGraph-stat floatLeft"></div>
+				<div class="type--practice barGraph-stat floatLeft"></div>
+			</div>
+		</div> -->
+		<section id="explanationSection" class="explanationSection">
+			<div>
+				<h3>What's What?</h3>
+				<div class="explanationContainer clearfix">
+					<div id="explanation-close" class="explanation-close">x</div>
+					<div class="explanationBlock floatLeft">
+						<div class="explanationBlock-title"><span class="colour--syntax">Syntax</span> Errors</div>
+						<p>
+							A syntax error can be caused by something as simple as a typo! An example of a syntactic error in your code is forgetting to close a tag with a &gt; symbol or mistyping a letter, &lt;jead&gt; instead of &lt;head&gt; for example
+						</p>
+					</div>
+					<div class="explanationBlock floatLeft">
+						<div class="explanationBlock-title"><span class="colour--semantic">Semantic</span> Errors</div>
+						<p>
+							Semantic errors are one step above 'best practice' errors. A semantic error involves using a tag in the wrong way, for example, using &lt;br&gt; tags to make new lines instead of using &lt;li&gt; tags.
+						</p>
+					</div>
+					<div class="explanationBlock floatLeft">
+						<div class="explanationBlock-title"><span class="colour--practice">Best Practice</span> Errors</div>
+						<p>
+							Don't overlook these errors! Caused when your code is syntactically correct, but it's been done in a very undesirable manner, best practice errors are important to attend to for clean code.
+						</p>
+					</div>
+					<div class="explanationBlock floatLeft">
+						<div class="explanationBlock-title"><span class="colour--deprecated">Deprecated</span> Errors</div>
+						<p>
+							The deprecated tag error is caused when you use a tag or attribute that was once validly used in HTML but no longer is. An example of this is using a &lt;strike&gt; tag instead of using the new &lt;del&gt;
+						</p>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section class="resultsOverviewWrapper">
+			<ul class="list-resultsOverview clearfix">
+				<li>
+					<div class="resultPreview--syntax resultPreview" data-ng-class="{ 'state-active' : totalSyntax != 0 }">
+						<div class="resultPreview-help">?</div>
+						<h5>Syntax</h5>
+						<div class="divider"></div>
+						<div class="bigCount font--heading">{{totalSyntax}}</div>
+					</div>
+				</li>
+				<li>
+					<div class="resultPreview--semantic resultPreview" data-ng-class="{ 'state-active' : totalSemantic != 0 }">
+						<div class="resultPreview-help">?</div>
+						<h5>Semantic</h5>
+						<div class="divider"></div>
+						<div class="bigCount font--heading">{{totalSemantic}}</div>
+					</div>
+				</li>
+				<li>
+					<div class="resultPreview--deprecated resultPreview" data-ng-class="{ 'state-active' : totalDeprecated != 0 }">
+						<div class="resultPreview-help">?</div>
+						<h5>Deprecated</h5>
+						<div class="divider"></div>
+						<div class="bigCount font--heading">{{totalDeprecated}}</div>
+					</div>
+				</li>
+				<li>
+					<div class="resultPreview--practice resultPreview" data-ng-class="{ 'state-active' : totalPractice != 0 }">
+						<div class="resultPreview-help">?</div>
+						<h5>Best Practice</h5>
+						<div class="divider"></div>
+						<div class="bigCount font--heading">{{totalPractice}}</div>
+					</div>
+				</li>
+			</ul>
+		</section>
+		<section class="multipleFilesOverview" data-ng-show="areMultipleFiles">
+			<ul class="list-condensedFiles">
+				<li data-ng-repeat="file in multipleFiles">
+					<div class="condensedFileOverview clearfix font--heading" data-ng-class="{ 'state-selected' :  currentResults == multipleFiles[$index] }" data-ng-click="setActiveFile($index)">
+						<div class="condensedFileOverview-title floatLeft">
+							<div class="truncate" title="index.html" data-ng-bind-html="file.fileName | trustHtml"></div>
+						</div>
+						<div class="condensedFileOverview-results fillSpace">
+							<ul class="list-condensedResults clearfix">
+								<li>
+									<div class="condensedFileOverview-resultBlock--syntax condensedFileOverview-resultBlock" data-ng-class="{ 'state-active' : file.syntaxCount != 0 }">
+										Syntax <span>{{ file.syntaxCount }}</span>
+									</div>
+								</li>
+								<li>
+									<div class="condensedFileOverview-resultBlock--semantic condensedFileOverview-resultBlock" data-ng-class="{ 'state-active' : file.semanticCount != 0 }">
+										Semantic <span>{{ file.semanticCount }}</span>
+									</div>
+								</li>
+								<li>
+									<div class="condensedFileOverview-resultBlock--deprecated condensedFileOverview-resultBlock" data-ng-class="{ 'state-active' : file.deprecatedCount != 0 }">
+										Deprecated <span>{{ file.deprecatedCount }}</span>
+									</div>
+								</li>
+								<li>
+									<div class="condensedFileOverview-resultBlock--practice condensedFileOverview-resultBlock" data-ng-class="{ 'state-active' : file.practiceCount != 0 }">
+										Best Practice <span>{{ file.practiceCount }}</span>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</section>
+		<div class="textOverview">
+			<p data-ng-show="currentResults.syntaxCount == 1 && currentResults.semanticCount == 3 && currentResults.deprecatedCount == 3 && currentResults.practiceCount == 7">
+				1337!
+			</p>
+			<p data-ng-show="totalErrors == 0">
+				<strong>Congratulations!</strong> Your site appears to be error-free.
+			</p>
+			<p data-ng-show="totalErrors > 0 && totalErrors <= 2">
+				Near perfect code - just a few errors to deal with.
+			</p>
+			<p data-ng-show="totalErrors > 2 && totalErrors <= 10">
+				Oops! You've got a few critters in here you'll have to clean up!
+			</p>
+			<p data-ng-show="totalErrors > 10 && totalErrors <= 30">
+				Gee, this code needs a clean up - get to work!
+			</p>
+			<p data-ng-show="totalErrors > 30 && totalErrors <= 50">
+				Gosh, your code's looking downtrodden with errors!
+			</p>
+			<p data-ng-show="totalErrors > 50">
+				Your site is riddled with errors! Grab a coffee and get to work!
+			</p>
+		</div>
+		<section class="zipOverview" data-ng-show="isZipFile">
+			<section class="zipVisual">
+				<h4>.zip Breakdown</h4>
+				<h6>Below we've highlighted any files with broken links as well any recommendations we have for file placement.</h6>
+				<ul class="zipList">
+					<li class="darkShade">
+						<div class="zipItem clearfix error">
+							<div class="zipItemIcon icon icon-file-code floatLeft"></div>
+							<div class="zipInfo fillSpace">
+								<div class="zipItemName">index.html</div>
+								<div class="zipMessage">
+									<h5>Broken Links: 5</h5>
+									<p>
+										This file contains links to other files that do not exist in 
+										the uploaded .zip file.
+									</p>
+									<div class="clickToView">click to view</div>
+								</div>
+								<ul class="zipItemChildren"></ul>
+							</div>
+						</div>
+					</li>
+					<li class="darkShade">
+						<div class="zipItem clearfix">
+							<div class="zipItemIcon icon icon-file-code floatLeft"></div>
+							<div class="zipInfo fillSpace">
+								<div class="zipItemName">about.html</div>
+								<div class="zipMessage">
+									<h5>Broken Links: 5</h5>
+									<p>
+										This file contains links to other files that do not exist in 
+										the uploaded .zip file.
+									</p>
+									<div class="">click to view</div>
+								</div>
+								<ul class="zipItemChildren"></ul>
+							</div>
+						</div>
+					</li>
+					<li class="darkShade">
+						<div class="zipItem clearfix warning">
+							<div class="zipItemIcon icon icon-file-image floatLeft"></div>
+							<div class="zipInfo fillSpace">
+								<div class="zipItemName">logo.png</div>
+								<div class="zipMessage">
+									<h5>File Location</h5>
+									<p>
+										Consider placing this file inside an <span>images/</span> 
+										directory.
+									</p>
+								</div>
+								<ul class="zipItemChildren"></ul>
+							</div>
+						</div>
+					</li>
+					<li class="darkShade">
+						<div class="zipItem clearfix warning">
+							<div class="zipItemIcon icon icon-file-code floatLeft"></div>
+							<div class="zipInfo fillSpace">
+								<div class="zipItemName">style.css</div>
+								<div class="zipMessage">
+									<h5>File Location</h5>
+									<p>
+										Consider placing this file inside a <span>css/</span> 
+										directory.
+									</p>
+								</div>
+								<ul class="zipItemChildren"></ul>
+							</div>
+						</div>
+					</li>
+					<li class="darkShade">
+						<div class="zipItem clearfix warning">
+							<div class="zipItemIcon icon icon-file-code floatLeft"></div>
+							<div class="zipInfo fillSpace">
+								<div class="zipItemName">main.js</div>
+								<div class="zipMessage">
+									<h5>File Location</h5>
+									<p>
+										Consider placing this file inside a <span>js/</span> 
+										directory.
+									</p>
+								</div>
+								<ul class="zipItemChildren"></ul>
+							</div>
+						</div>
+					</li>
+					<li class="darkShade">
+						<div class="zipItem clearfix">
+							<div class="zipItemIcon icon icon-doc floatLeft"></div>
+							<div class="zipInfo fillSpace">
+								<div class="zipItemName">statementofdelivery.pdf</div>
+								<ul class="zipItemChildren"></ul>
+							</div>
+						</div>
+					</li>
+					<li class="darkShade">
+						<div class="zipItem folder clearfix">
+							<div class="zipItemIcon icon icon-folder-open-empty floatLeft"></div>
+							<div class="zipInfo fillSpace">
+								<div class="zipItemName">images</div>
+								<ul class="zipItemChildren">
+									<li class="lightShade">
+										<div class="zipItem clearfix">
+											<div class="zipItemIcon icon icon-file-image floatLeft"></div>
+											<div class="zipInfo fillSpace">
+												<div class="zipItemName">something.jpg</div>
+												<ul class="zipItemChildren"></ul>
+											</div>
+										</div>
+									</li>
+									<li class="lightShade">
+										<div class="zipItem folder clearfix">
+											<div class="zipItemIcon icon icon-folder-open-empty floatLeft"></div>
+											<div class="zipInfo fillSpace">
+											<div class="zipItemName">folder</div>
+												<ul class="zipItemChildren">
+													<li class="darkShade">
+														<div class="zipItem clearfix">
+															<div class="zipItemIcon icon icon-doc floatLeft"></div>
+															<div class="zipInfo fillSpace">
+																<div class="zipItemName">statementofdelivery.pdf</div>
+																<ul class="zipItemChildren"></ul>
+															</div>
+														</div>
+													</li>
+													<li class="darkShade">
+														<div class="zipItem folder clearfix">
+															<div class="zipItemIcon icon icon-folder-open-empty floatLeft"></div>
+															<div class="zipInfo fillSpace">
+															<div class="zipItemName">folder</div>
+																<ul class="zipItemChildren">
+																	<li class="lightShade">
+																		<div class="zipItem clearfix">
+																			<div class="zipItemIcon icon icon-doc floatLeft"></div>
+																			<div class="zipInfo fillSpace">
+																				<div class="zipItemName">statementofdelivery.pdf</div>
+																				<ul class="zipItemChildren"></ul>
+																			</div>
+																		</div>
+																	</li>
+																	<li class="lightShade">
+																		<div class="zipItem clearfix">
+																			<div class="zipItemIcon icon icon-doc floatLeft"></div>
+																			<div class="zipInfo fillSpace">
+																				<div class="zipItemName">statementofdelivery.pdf</div>
+																				<ul class="zipItemChildren"></ul>
+																			</div>
+																		</div>
+																	</li>
+																	<li class="lightShade">
+																		<div class="zipItem clearfix">
+																			<div class="zipItemIcon icon icon-doc floatLeft"></div>
+																			<div class="zipInfo fillSpace">
+																				<div class="zipItemName">statementofdelivery.pdf</div>
+																				<ul class="zipItemChildren"></ul>
+																			</div>
+																		</div>
+																	</li>
+																</ul>
+															</div>
+														</div>
+													</li>
+													<li class="darkShade">
+														<div class="zipItem clearfix">
+															<div class="zipItemIcon icon icon-doc floatLeft"></div>
+															<div class="zipInfo fillSpace">
+																<div class="zipItemName">statementofdelivery.pdf</div>
+																<ul class="zipItemChildren"></ul>
+															</div>
+														</div>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</li>
+									<li class="lightShade">
+										<div class="zipItem clearfix">
+											<div class="zipItemIcon icon icon-doc floatLeft"></div>
+											<div class="zipInfo fillSpace">
+												<div class="zipItemName">statementofdelivery.pdf</div>
+												<ul class="zipItemChildren"></ul>
+											</div>
+										</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</section>
+		</section>
+	</section>
+	<section class="marginTop-50">
+		<section class="errorsCollection state-empty_wrapper state-hide-empty" data-ng-class="{ 'state-empty' : currentResults.syntaxCount == 0 }">
+			<h4>Syntax Errors</h4>
+			<div class="fileSelectBox" data-ng-show="areMultipleFiles">
+				<select data-ng-model="currentResults" data-ng-options="file.fileName for file in multipleFiles">
+				</select>
+			</div>
+			<ul class="list-errors">
+				<li class="type--syntax" data-ng-repeat="error in currentResults.syntaxErrors">
+					<div class="errorExcerpt">
+						<div class="text--softSmall errorExcerpt-line">
+							<span>Line <span>{{ error.line }}</span></span>, <span>Column <span>{{ error.column }}</span> - <span>{{ error.end }}</span></span>
+						</div>
+						<div class="errorExcerpt-message" data-ng-bind-html="escapeHtml(error.message) | trustHtml">
+						</div>
+						<div class="errorExcerpt-original clearfix">
+							<div class="errorExcerpt-original-lineNumber floatLeft">{{ error.line }}.</div>
+							<div class="errorExcerpt-original-code fillSpace">
+								 <pre data-ng-bind-html="currentResults.sourceCode[error.line - 1] | trustHtml"></pre>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</section>
+		<section class="errorsCollection state-empty_wrapper state-hide-empty" data-ng-class="{ 'state-empty' : currentResults.semanticCount == 0 }">
+			<h4>Semantic Errors</h4>
+			<div class="fileSelectBox" data-ng-show="areMultipleFiles">
+				<select data-ng-model="currentResults" data-ng-options="file.fileName for file in multipleFiles">
+				</select>
+			</div>
+			<ul class="list-errors">
+				<li class="type--semantic" data-ng-repeat="error in currentResults.semanticErrors">
+					<div class="errorExcerpt">
+						<div class="text--softSmall errorExcerpt-line">
+							<span>Line <span>{{ error.line }}</span></span>, <span>Column <span>{{ error.column }}</span> - <span>{{ error.end }}</span></span>
+						</div>
+						<div class="errorExcerpt-message" data-ng-bind-html="escapeHtml(error.message) | trustHtml">
+						</div>
+						<div class="errorExcerpt-original clearfix">
+							<div class="errorExcerpt-original-lineNumber floatLeft">{{ error.line }}.</div>
+							<div class="errorExcerpt-original-code fillSpace">
+								 <pre data-ng-bind-html="currentResults.sourceCode[error.line - 1] | trustHtml"></pre>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</section>
+		<section class="errorsCollection state-empty_wrapper state-hide-empty" data-ng-class="{ 'state-empty' : currentResults.deprecatedCount == 0 }">
+			<h4>Deprecated Errors</h4>
+			<div class="fileSelectBox" data-ng-show="areMultipleFiles">
+				<select data-ng-model="currentResults" data-ng-options="file.fileName for file in multipleFiles">
+				</select>
+			</div>
+			<ul class="list-errors">
+				<li class="type--deprecated" data-ng-repeat="error in currentResults.deprecatedErrors">
+					<div class="errorExcerpt">
+						<div class="text--softSmall errorExcerpt-line">
+							<span>Line <span>{{ error.line }}</span></span>, <span>Column <span>{{ error.column }}</span> - <span>{{ error.end }}</span></span>
+						</div>
+						<div class="errorExcerpt-message" data-ng-bind-html="escapeHtml(error.message) | trustHtml">
+						</div>
+						<div class="errorExcerpt-original clearfix">
+							<div class="errorExcerpt-original-lineNumber floatLeft">{{ error.line }}.</div>
+							<div class="errorExcerpt-original-code fillSpace">
+								 <pre data-ng-bind-html="currentResults.sourceCode[error.line - 1] | trustHtml"></pre>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</section>
+		<section class="errorsCollection state-empty_wrapper state-hide-empty" data-ng-class="{ 'state-empty' : currentResults.practiceCount == 0 }">
+			<h4>Best Practice Errors</h4>
+			<div class="fileSelectBox" data-ng-show="areMultipleFiles">
+				<select data-ng-model="currentResults" data-ng-options="file.fileName for file in multipleFiles">
+				</select>
+			</div>
+			<ul class="list-errors">
+				<li class="type--practice" data-ng-repeat="error in currentResults.practiceErrors">
+					<div class="errorExcerpt">
+						<div class="text--softSmall errorExcerpt-line">
+							<span>Line <span>{{ error.line }}</span></span>, <span>Column <span>{{ error.column }}</span> - <span>{{ error.end }}</span></span>
+						</div>
+						<div class="errorExcerpt-message" data-ng-bind-html="escapeHtml(error.message) | trustHtml">
+						</div>
+						<div class="errorExcerpt-original clearfix">
+							<div class="errorExcerpt-original-lineNumber floatLeft">{{ error.line }}.</div>
+							<div class="errorExcerpt-original-code fillSpace">
+								 <pre data-ng-bind-html="currentResults.sourceCode[error.line - 1] | trustHtml"></pre>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</section>
+	</section>
+	<section id="resultsSourceSection" class="resultsSectionTitle resultsSourceSection marginTop-50">
+		<h4>Source Code</h4>
+		<div class="fileSelectBox" data-ng-show="areMultipleFiles">
+			<select data-ng-model="currentResults" data-ng-options="file.fileName for file in multipleFiles">
+			</select>
+		</div>
+		<div class="sourceCodeContainer" id="sourceCodeContainer">
+			<!-- <ul class="list-sourceCode" data-ng-repeat="file in multipleFiles">
+				HEY
+			</ul> -->
+			<!-- <ul class="list-sourceCode">
+				<li data-ng-repeat="line in currentResults.sourceCode track by $index">
+					<div class="sourceCode clearfix" data-ng-class="{ 'status-error' : something }">
+						<div class="sourceCode-number floatLeft">
+							{{ $index + 1 }}
+						</div>
+						<div class="sourceCode-code fillSpace">
+							<pre data-ng-bind-html="line | trustHtml"></pre>
+						</div>
+					</div>
+				</li>
+			</ul> -->
+			<!--
+				Ought to limit to 20 lines of code, 
+				with a button to view all. To cut back 
+				on incredible amounts of scrolling.
+				Do the same with the errors list.
+			-->
+		</div>
+		<div id="sourceCodeScroll" class="sourceCodeScroll noselect">
+			<div class="scrollWrapper">
+				<div id="scrollKnob" class="knob"></div>
+				<div id="scrollBar" class="bar"></div>
+			</div>
+		</div>
+	</section>
+	<section class="resultsSectionTitle marginTop-50" style="display:none;">
+		<!-- <h4>Feedback</h4> -->
+		<div class="depressedTextBlock">
+			<!-- <p>
+				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce hendrerit mi ut nunc convallis finibus.
+			</p>
+			<p>
+				Nam mi quam, aliquet eu leo vitae, euismod auctor ligula.
+			</p> -->
+			<div class="extraHelp">
+				<h4 class="text--mediumTitle">Extra Help</h4>
+				<ul class="list-ExtraLinks">
+					<li>
+						<a href="javascript:void(0);">Syntax Guide</a>
+						<h5>What What (In the Div)</h5>
+					</li>
+					<li>
+						<a href="javascript:void(0);">Semantics Guide</a>
+						<h5>HTML MOTHERFUNKER. DO YOU SPEAK IT?</h5>
+					</li>
+					<li>
+						<a href="javascript:void(0);">Best Practice Guide</a>
+						<h5>/h1/Neo/h1/ he is the one.</h5>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</section>
+</section>
+<section style="display:none;">
+	<div id="template--sourceCode-info" class="template_cont" style="display:none;">
+		<div class="subItem template">
+			<div class="sourceCodeErrorInfo-type">
+				<span class="errorType">Semantic</span> Error
+			</div>
+			<div class="sourceCodeErrorInfo-excerpt">href=</div>
+			<div class="sourceCodeErrorInfo-col">
+				Column <span class="sourceCodeErrorInfo-colStart">1</span> 
+				to <span class="sourceCodeErrorInfo-colEnd">3</span>
+			</div>
+			<div class="sourceCodeErrorInfo-msg">Woah, there's an error!</div>
+		</div>
+	</div>
+	<div id="template--sourceCode" class="template_cont" style="display:none;">
+		<ul class="template list-sourceCode">
+		</ul>
+	</div>
+	<div id="template--sourceCode-line" class="template_cont" style="display:none;">
+		<li class="sourceCode-line template">
+			<div class="sourceCodeErrorCount">
+				0
+			</div>
+			<div class="sourceCode clearfix"> <!-- data-ng-class="{ 'status-error' : something }" -->
+				<div class="sourceCode-number floatLeft">
+					<!-- {{ $index + 1 }} --> NUM
+				</div>
+				<div class="sourceCode-code fillSpace">
+					<pre></pre>
+					<div class="sourceCode-code-errorsCont"></div>
+				</div>
+			</div>
+			<div class="sourceCodeErrorInfo">
+			</div>
+		</li>
+	</div>
+	<div id="template--sourceCode-lineError" class="template_cont" style="display:none;">
+		<div class="template">
+			<pre class="sourceCode-lineError"></pre>
+		</div>
+	</div>
+</section>
+	
