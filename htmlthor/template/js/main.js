@@ -35,6 +35,14 @@ htmlthorApp.config(function($stateProvider, $locationProvider, $urlRouterProvide
 				activeTab: 'results'
             }
         )
+		.state('temp',
+            {
+				controller: 'ResultsController',
+                url: '/temp',
+                templateUrl: '/static/partials/_temp.html',
+				activeTab: 'results'
+            }
+        )
 
 });
 

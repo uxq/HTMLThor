@@ -1120,28 +1120,76 @@ strong {
 .zipList {
 	
 	li {
-		margin-top: 10px;
+		margin-top: 7px;
+		padding: 5px;
+		border-radius: 3px;
+	}
+
+	.lightShade {
+		background-color: #FCFCFC;
+	}
+
+	.darkShade {
+		background-color: #F0F0F0;
 	}
 
 }
 
-.zipItem {}
+.zipItem {
+	
+	&.folder {
+
+		> .zipInfo > .zipItemChildren {
+			display: block;
+		}
+
+	}
+
+	&.error {
+
+		> .zipItemIcon {
+			.colour--syntax;
+			color: #FFF;
+			text-shadow: 0 1px rgba(0, 0, 0, 0.24);
+		}
+
+	}
+
+	&.warning {
+
+		> .zipItemIcon {
+			.colour--practice;
+			color: #FFF;
+			text-shadow: 0 1px rgba(0, 0, 0, 0.24);
+		}
+
+	}
+
+}
 
 .zipItemIcon {
-	width: 30px;
-	height: 30px;
-	background-color: red;
+	width: 26px;
+	height: 26px;
+	text-align: center;
+	line-height: 26px;
+	background-color: #FFF;
 	border-radius: 5px;
 	margin-right: 5px;
 	display: inline-block;
+	border: 1px solid #F0F0F0;
+	font-size: .9em;
 }
 
 .zipItemName {
 	display: inline-block;
+	color: #AAA;
+	margin-top: 6px;
+	font-size: .8em;
 }
 
 .zipItemChildren {
-	padding-left: 30px;
+	display: none;
+	padding: 10px 30px 10px 0;
 }
 
 //       /
