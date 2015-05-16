@@ -167,15 +167,19 @@ class MyHTMLParserV2(HTMLParser):
 
         requiredClosingTags = ["html", "head", "body", "!doctype", "title", "meta", "main", "base"]
 
-        if (sql.isSelfClosing(tag.lower())):
+        currentIsSelfClosing = sql.isSelfClosing(tag.lower());
+        lastOpened = self.openedTag[-1]
+        if (currentIsSelfClosing):
             return 0
-        
+        elif (lastOpened.tagName != tag.lower()): 
+            #No open tag found for current closing tag!
+            matchFound = True
+            error = {'line': line, 'column': lastOpened.position[1], 'column_end': offset, 'message' : "This tag has never been opened! Make sure you always open and close HTML tags.", 'type': "syntax"}
+            self.syntaxErrors.append(error)
+
         #Look for tag. If tag isn't closed (no match is found), mark as error on tag.
 
         while (len(self.openedTag) > 0 and not matchFound):
-
-            #selfClosing = sql.isSelfClosing(tag)
-            #if (not selfClosing):
 
             _tag = self.openedTag[-1]
             
