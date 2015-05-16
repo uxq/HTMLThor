@@ -1,3 +1,5 @@
+var testFiles;
+
 htmlthorApp.controller('ResultsController', function ($scope, resultsService) {
 
     //console.log("Results Controller loaded.");
@@ -13,342 +15,22 @@ htmlthorApp.controller('ResultsController', function ($scope, resultsService) {
 	$scope.totalDeprecated = 0;
 	$scope.totalPractice = 0;
 	$scope.totalErrors = 0;
+
+	$scope.totalSyntaxTotalCount = 0;
+	$scope.totalSemanticTotalCount = 0;
+	$scope.totalDeprecatedTotalCount = 0;
+	$scope.totalPracticeTotalCount = 0;
 	
 	$scope.activeFile = 0;
 	
 	$scope.areMultipleFiles = false;
 
+	$scope.isZipFile = true; // return to false once design is finished
+
 	// add class for when results exist on the site.
 	$("body").addClass("state-resultsExist");	
 	
 	$scope.multipleFiles = [];	
-	
-	$scope.oldFiles = [
-	
-		{
-			fileName : "index.html",
-			syntaxCount : 2,
-			semanticCount : 3,
-			deprecatedCount : 3,
-			practiceCount : 7,
-			
-			syntaxErrors : [
-				{
-					line : 1,
-					column : 1,
-					end: 3,
-					message : "language is an attribute that does not exist for this tag. Make sure you've spelt it correctly or that you're not using the attribute which belongs to another tag!",
-					type: "syntax"
-				},
-				{
-					line : 11,
-					column : 4,
-					end: 7,
-					message : "language is an attribute that does not exist for this tag. Make sure you've spelt it correctly or that you're not using the attribute which belongs to another tag!",
-					type: "syntax"
-				}
-			],
-			
-			semanticErrors : [
-				{
-					line : 2,
-					column : 1,
-					end: 3,
-					message : "semantic error",
-					type: "semantic"
-				},
-				{
-					line : 11,
-					column : 1,
-					end: 3,
-					message : "hello there",
-					type: "semantic"
-				},
-				{
-					line : 9,
-					column : 1,
-					end: 3,
-					message : "error there",
-					type: "semantic"
-				}
-			],
-			
-			deprecatedErrors : [
-				{
-					line : 4,
-					column : 1,
-					end: 3,
-					message : "dep error",
-					type: "deprecated"
-				},
-				{
-					line : 6,
-					column : 1,
-					end: 3,
-					message : "what's dis",
-					type: "deprecated"
-				},
-				{
-					line : 4,
-					column : 1,
-					end: 3,
-					message : "another error",
-					type: "deprecated"
-				}
-			],
-			
-			practiceErrors : [
-				{
-					line : 4,
-					column : 1,
-					end: 3,
-					message : "For best practices, use the value attribute for every <input> tag.",
-					type: "practice"
-				},
-				{
-					line : 6,
-					column : 1,
-					end: 3,
-					message : "For best practices, use the value attribute for every <input> tag.",
-					type: "practice"
-				},
-				{
-					line : 4,
-					column : 1,
-					end: 3,
-					message : "For best practices, use the value attribute for every <input> tag.",
-					type: "practice"
-				},
-				{
-					line : 2,
-					column : 1,
-					end: 3,
-					message : "For best practices, use the value attribute for every <input> tag.",
-					type: "practice"
-				},
-				{
-					line : 11,
-					column : 1,
-					end: 3,
-					message : "For best practices, use the value attribute for every <input> tag.",
-					type: "practice"
-				},
-				{
-					line : 9,
-					column : 1,
-					end: 3,
-					message : "For best practices, use the value attribute for every <input> tag.",
-					type: "practice"
-				},
-				{
-					line : 4,
-					column : 1,
-					end: 3,
-					message : "For best practices, use the value attribute for every <input> tag.",
-					type: "practice"
-				}
-			],
-			
-			sourceCode : [
-				"<!doctype HTML>",
-				"<html>",
-				"<head>",
-				"</head>",
-				"<body>",
-				"<a href=''>boopywoopy dsfffffffffffffffffffffffffsdkjfkdsjdskbfksjbfdkbdfskbdsfkbsdfkbdsfkbsdfkbsfdkdsbfkfsdbkfdsb",
-				"</body>",
-				"</div>",
-				"</div>",
-				"</disdv>",
-				"</sdfdfs>",
-				"</dsdfiv>",
-				"</weew>",
-				"</dfs>",
-				"</sdfsdf>",
-				"</didsfsdv>",
-				"</disfdsdv>",
-			]
-			
-		},
-		{
-			fileName : "about.html",
-			syntaxCount : 4,
-			semanticCount : 0,
-			deprecatedCount : 0,
-			practiceCount : 0,
-			
-			
-			syntaxErrors : [
-				{
-					line : 1,
-					column : 1,
-					end: 3,
-					message : "language is an attribute that does not exist for this tag. Make sure you've spelt it correctly or that you're not using the attribute which belongs to another tag!",
-					type: "syntax"
-				},
-				{
-					line : 2,
-					column : 1,
-					end: 3,
-					message : "language is an attribute that does not exist for this tag. Make sure you've spelt it correctly or that you're not using the attribute which belongs to another tag!",
-					type: "syntax"
-				},
-				{
-					line : 6,
-					column : 4,
-					end: 12,
-					message : "language is an attribute that does not exist for this tag. Make sure you've spelt it correctly or that you're not using the attribute which belongs to another tag!",
-					type: "syntax"
-				},
-				{
-					line : 9,
-					column : 1,
-					end: 3,
-					message : "language is an attribute that does not exist for this tag. Make sure you've spelt it correctly or that you're not using the attribute which belongs to another tag!",
-					type: "syntax"
-				}
-			],
-			
-			semanticErrors : [
-			],
-			
-			deprecatedErrors : [
-			],
-			
-			practiceErrors : [
-			],
-			
-			sourceCode : [
-				"<!doctype HTML>",
-				"<second file woopy de woop>",
-				"	<head>",
-				"	</head>",
-				"	<body>",
-				"		<a href=''>boopywoopy dsfffffffffffffffffffffffffsdkjfkdsjdskbfksjbfdkbdfskbdsfkbsdfkbdsfkbsdfkbsfdkdsbfkfsdbkfdsb",
-				"	</body>",
-				"	</div>",
-				"	</div>",
-				"	</disdv>",
-				"	</sdfdfs>",
-				"	</dsdfiv>",
-				"	</weew>",
-				"	</dfs>",
-				"	</sdfsdf>",
-				"	</didsfsdv>",
-				"	</disfdsdv>",
-			]
-			
-		},
-		{
-			fileName : "contact.html",
-			syntaxCount : 1,
-			semanticCount : 2,
-			deprecatedCount : 2,
-			practiceCount : 2,
-			
-			
-			syntaxErrors : [
-				{
-					line : 1,
-					column : 1,
-					end: 3,
-					message : "language is an attribute that does not exist for this tag. Make sure you've spelt it correctly or that you're not using the attribute which belongs to another tag!",
-					type: "syntax"
-				}
-			],
-			
-			semanticErrors : [
-				{
-					line : 2,
-					column : 1,
-					end: 3,
-					message : "semantic error",
-					type: "semantic"
-				},
-				{
-					line : 11,
-					column : 1,
-					end: 3,
-					message : "hello there",
-					type: "semantic"
-				}
-			],
-			
-			deprecatedErrors : [
-				{
-					line : 4,
-					column : 1,
-					end: 3,
-					message : "dep error",
-					type: "deprecated"
-				},
-				{
-					line : 6,
-					column : 1,
-					end: 3,
-					message : "what's dis",
-					type: "deprecated"
-				}
-			],
-			
-			practiceErrors : [
-				{
-					line : 4,
-					column : 1,
-					end: 3,
-					message : "For best practices, use the value attribute for every <input> tag.",
-					type: "practice"
-				},
-				{
-					line : 6,
-					column : 1,
-					end: 3,
-					message : "For best practices, use the value attribute for every <input> tag.",
-					type: "practice"
-				}
-			],
-			
-			sourceCode : [
-				"<!THIRD FILE WOOP WOOP WOOP>",
-				"<html>",
-				"<head>",
-				"</head>",
-				"<body>",
-				"<a href=''>boopywoopy dsfffffffffffffffffffffffffsdkjfkdsjdskbfksjbfdkbdfskbdsfkbsdfkbdsfkbsdfkbsfdkdsbfkfsdbkfdsb",
-				"</body>",
-				"</div>",
-				"</div>",
-				"</disdv>",
-				"</sdfdfs>",
-				"</dsdfiv>",
-				"</weew>",
-				"</dfs>",
-				"</sdfsdf>",
-				"</didsfsdv>",
-				"</disfdsdv>",
-			]
-			
-		}
-	
-	];
-	
-	// console.log("Going to set results with", $scope.oldFiles);
-	
-	// resultsService.setResults($scope.oldFiles);
-	
-	// console.log("What are the current results?", resultsService.getResults());
-	
-	// $scope.prepMultipleFiles = function() {
-	
-		// var numberOfFiles = $scope.multipleFiles.length;
-		
-		// for(var i = 0; i < numberOfFiles; i++) {
-			// $scope.multipleFiles[i].fileNumber = i;
-		// }
-	
-	// }
-	
-	// $scope.prepMultipleFiles();
 	
 	$scope.calculateTotalErrorCounts = function() {
 	
@@ -374,12 +56,6 @@ htmlthorApp.controller('ResultsController', function ($scope, resultsService) {
 	
 		$scope.activeFile = numberToSet;
 		$scope.currentResults = $scope.multipleFiles[numberToSet];
-	
-	}
-	
-	if($scope.multipleFiles.length > 1) {
-	
-		$scope.areMultipleFiles = true;
 	
 	}
 	
@@ -415,32 +91,47 @@ htmlthorApp.controller('ResultsController', function ($scope, resultsService) {
 	
 	$scope.getStoredResults = function() {
 		$scope.multipleFiles = resultsService.getResults();
-		console.log("@#@Data to be used for results:", $scope.multipleFiles);
+	
+		if($scope.multipleFiles.length > 1) {
+		
+			$scope.areMultipleFiles = true;
+		
+		}
+
 		//$scope.multipleFiles = $scope.oldFiles; // !!! REMOVE THIS !!!
 	}
 	
 	$scope.prepCounts = function() {
-		var syntaxTotalCount = 0;
-		var semanticTotalCount = 0;
-		var deprecatedTotalCount = 0;
-		var practiceTotalCount = 0;
+
+		testFiles = $scope.multipleFiles;
 		
 		for(var i = 0; i < $scope.multipleFiles.length ; i++) {
-			syntaxTotalCount += $scope.multipleFiles[0].syntaxErrors.length;
-			$scope.multipleFiles[0].syntaxCount = syntaxTotalCount;
-			semanticTotalCount += $scope.multipleFiles[0].semanticErrors.length;
-			$scope.multipleFiles[0].semanticCount = semanticTotalCount;
-			deprecatedTotalCount += $scope.multipleFiles[0].deprecatedErrors.length;
-			$scope.multipleFiles[0].deprecatedCount = deprecatedTotalCount;
-			practiceTotalCount += $scope.multipleFiles[0].practiceErrors.length;
-			$scope.multipleFiles[0].practiceCount = practiceTotalCount;
+			// console.log("i is: " + i, "0 obj is: ", $scope.multipleFiles[0]);
+			// console.log("Checking this file for lengths:", $scope.multipleFiles[i], $scope.multipleFiles[i].syntaxErrors);
+			if(!$scope.multipleFiles[i].fileName) {
+				$scope.multipleFiles[i] = $scope.multipleFiles[i][0];
+			}
+
+			var syntaxTotalCount = 0;
+			var semanticTotalCount = 0;
+			var deprecatedTotalCount = 0;
+			var practiceTotalCount = 0;
+
+			syntaxTotalCount += $scope.multipleFiles[i].syntaxErrors.length;
+			$scope.multipleFiles[i].syntaxCount = syntaxTotalCount;
+			semanticTotalCount += $scope.multipleFiles[i].semanticErrors.length;
+			$scope.multipleFiles[i].semanticCount = semanticTotalCount;
+			deprecatedTotalCount += $scope.multipleFiles[i].deprecatedErrors.length;
+			$scope.multipleFiles[i].deprecatedCount = deprecatedTotalCount;
+			practiceTotalCount += $scope.multipleFiles[i].practiceErrors.length;
+			$scope.multipleFiles[i].practiceCount = practiceTotalCount;
+		
+			$scope.totalSyntax += syntaxTotalCount;
+			$scope.totalSemantic += semanticTotalCount;
+			$scope.totalDeprecated += deprecatedTotalCount;
+			$scope.totalPractice += practiceTotalCount;
 			
 		}
-		
-		$scope.totalSyntax = syntaxTotalCount;
-		$scope.totalSemantic = semanticTotalCount;
-		$scope.totalDeprecated = deprecatedTotalCount;
-		$scope.totalPractice = practiceTotalCount;
 		
 		$scope.totalErrors = $scope.totalSyntax + $scope.totalSemantic + 
 			$scope.totalDeprecated + $scope.totalPractice;
