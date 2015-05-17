@@ -780,6 +780,10 @@ function generateZipDisplayItem(zipItemData, childLevel) {
 		}
 	}
 
+	if(!zipItemData.name || zipItemData.name == "") {
+		zipItem.addClass("empty");
+	}
+
 	return zipItem;
 
 }
