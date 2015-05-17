@@ -10,9 +10,18 @@ class ThorFolder:
     def __init__(self):
         self.type = "folder"
         self.name = ""
+        self.path = ""
         self.children = list()
 
+    # def json_children(self, children):
+    #     for c in children:
+    #         if (c.type == 'folder' and len(c.children) > 0):
+    #             self.json_children(c.children)
+    #         else:
+    #             c = c.as_json()
+
     def as_json(self):
+        # self.json_children(self.children)
         return { "type": self.type, 
                  "name": self.name, 
                  "children": self.children }
@@ -32,6 +41,76 @@ class ThorFile(ThorFolder):
                  "broken": self.broken, 
                  "brokenCount": self.brokenCount, 
                  "locationBad": self.locationBad }
+
+zipFileStructure = list()
+
+# Create folder structure given a folder path
+def createFolder(folders):
+
+    nameList = folders.split("/")
+    depth = 0
+    previousFolder = ThorFolder()
+    rootFolder = ThorFolder()
+
+    for name in nameList:
+        
+        folder = ThorFolder()
+        folder.name = name
+
+        path = nameList[0] + "/"
+        k = 0
+        while (k < depth):
+            path = path + nameList[k] + "/"
+            k+=1
+
+        folder.path = path
+        
+        if (depth == 0):
+            rootFolder = folder
+        elif (depth > 0):
+            previousFolder.children.append(folder)
+        
+        previousFolder = folder
+        depth+=1
+
+    zipFileStructure.append(rootFolder)
+
+# Find folder given path
+def findFolder(folders, path):
+    for folder in folders:
+
+        if (folder.type == "folder"):
+            if (folder.path == path):
+                return folder
+            if (len(folder.children) > 0):
+                return findFolder(folder.children, path)
+
+    return ThorFolder()
+
+
+# Add file to specific folder path
+def addFileToFolder(file):
+
+    path = file.split("/")
+    del path[-1];
+    path = '/'.join(path) + "/"
+    folder = findFolder(zipFileStructure, path)
+
+    currentFile = ThorFile()
+    currentFile.name = file.split("/")[-1]
+    currentFile.extension = os.path.splitext(file)[-1].lower()
+    
+    # If CSS is outside of CSS or Styles folder
+    if (currentFile.extension == ".css" and folder.name != "css/"):
+        currentFile.locationBad = True
+
+    # If JS is outside of JS or Javascript folder
+    if (currentFile.extension == ".js" and folder.name != "js/"):
+        currentFile.locationBad = True
+
+    folder.children.append(currentFile);
+
+    return
 
 def checkFile(uploadFile, file_extension):
 
@@ -71,20 +150,36 @@ def checkFile(uploadFile, file_extension):
         zipStructure = list()
         currentFolder = ThorFolder()
         allZipFiles = list()
-        isMacOsx = False
+
+        '''
+        for file in nameList:
+
+            name = file.filename
+            
+            # Create folders
+            if (file.file_size == 0):
+                createFolder(name)
+        '''
 
         for file in nameList:
 
             name = file.filename
 
-            # Skip __MACOSX folder
-            if (name.find("__MACOSX") == -1):
+            '''
+            # Add file to folder
+            if (file.file_size > 0):
+                addFileToFolder(name)
+                allZipFiles.append(file)
+            '''
+
+            # Skip __MACOSX and .DS_Store files and folders
+            if (name.find("__MACOSX") == -1 and name.find(".DS_Store") == -1):
             
                 # File is in root folder
                 if (len(name.split("/")) == 1):
                     zipStructure.append(currentFolder)
                     currentFolder = ThorFolder()
-                    currentFolder.name = "root"
+                    currentFolder.name = "/"
 
                 # is File
                 if (file.file_size > 0):
@@ -102,6 +197,7 @@ def checkFile(uploadFile, file_extension):
 
                     currentFolder.children.append(currentFile.as_json());
                     allZipFiles.append(file)
+
                 # is Folder
                 else:
                     # needs support for subfolders
@@ -129,6 +225,9 @@ def checkFile(uploadFile, file_extension):
                     totalErrors.append(errors)
                 except KeyError:
                     continue
+
+
+        #print zipFileStructure[0].as_json()
 
         return { "structure": [ob.as_json() for ob in zipStructure], "errors": totalErrors }
 
