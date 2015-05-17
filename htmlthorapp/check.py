@@ -71,30 +71,43 @@ def checkFile(uploadFile, file_extension):
         zipStructure = list()
         currentFolder = ThorFolder()
         allZipFiles = list()
+        isMacOsx = False
 
         for file in nameList:
 
             name = file.filename
-            
-            # File is in root folder
-            if (len(name.split("/")) == 1):
-                zipStructure.append(currentFolder)
-                currentFolder = ThorFolder()
-                currentFolder.name = "root"
 
-            # is File
-            if (file.file_size > 0):
-                currentFile = ThorFile()
-                currentFile.name = name.split("/")[-1]
-                currentFile.extension = os.path.splitext(name)[-1].lower()
-                currentFolder.children.append(currentFile.as_json());
-                allZipFiles.append(file)
-            # is Folder
-            else:
-                # needs support for subfolders
-                zipStructure.append(currentFolder)
-                currentFolder = ThorFolder()
-                currentFolder.name = name
+            # Skip __MACOSX folder
+            if (name.find("__MACOSX") == -1):
+            
+                # File is in root folder
+                if (len(name.split("/")) == 1):
+                    zipStructure.append(currentFolder)
+                    currentFolder = ThorFolder()
+                    currentFolder.name = "root"
+
+                # is File
+                if (file.file_size > 0):
+                    currentFile = ThorFile()
+                    currentFile.name = name.split("/")[-1]
+                    currentFile.extension = os.path.splitext(name)[-1].lower()
+                    
+                    # If CSS is outside of CSS or Styles folder
+                    if (currentFile.extension == ".css" and currentFolder.name != "css/"):
+                        currentFile.locationBad = True
+
+                    # If JS is outside of JS or Javascript folder
+                    if (currentFile.extension == ".js" and currentFolder.name != "js/"):
+                        currentFile.locationBad = True
+
+                    currentFolder.children.append(currentFile.as_json());
+                    allZipFiles.append(file)
+                # is Folder
+                else:
+                    # needs support for subfolders
+                    zipStructure.append(currentFolder)
+                    currentFolder = ThorFolder()
+                    currentFolder.name = name
 
         for file in allZipFiles:
             
