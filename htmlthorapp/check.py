@@ -71,29 +71,26 @@ def createFolder(folders):
             k+=1
 
         folder.path = path
-        
-        # if (depth == 0):
-        #     rootFolder = folder
-        # elif (depth > 0):
+
         previousFolder.children.append(folder)
         previousFolder.children_parsed.append(folder.as_json())
         
         previousFolder = folder
         depth+=1
 
-    #zipFileStructure.append(rootFolder)
-
 # Find folder given path
 def findFolder(folders, path):
-    for folder in folders:
 
+    foundFolder = ThorFolder()
+
+    for folder in folders:
         if (folder.type == "folder"):
             if (folder.path == path):
                 return folder
-            if (len(folder.children) > 0):
-                return findFolder(folder.children, path)
+            elif (len(folder.children) > 0):
+                foundFolder = findFolder(folder.children, path)
 
-    return ThorFolder()
+    return foundFolder
 
 
 # Add file to specific folder path

@@ -32,6 +32,7 @@ class MyHTMLParserV2(HTMLParser):
         self.closedTag = list()
         self.hasDoctype = False
         self.doctypeCount = 0
+        self.inCode = list()
 
     def closeTheTag(self):
         self.openDoctype = False
@@ -88,6 +89,9 @@ class MyHTMLParserV2(HTMLParser):
 
         for attribute, value in attributes:
 
+            # offset of first attribute
+            offset = self.inCode[line-1].find(attribute)
+
             #check for charset existance
             if(tag.lower() == "meta" and attribute.lower() == "charset" and value.lower() == "utf-8"): 
                 self.requiredTags.append(tag.lower())
@@ -119,7 +123,7 @@ class MyHTMLParserV2(HTMLParser):
                 self.practiceErrors.append(error)
 
             if (not validAttr):
-                debugError = {'line': line, 'column': offset, 'message' : "Not a valid attribute("+attribute+")", 'type': "practice"}
+                debugError = {'line': line, 'column': offset, 'column_end': offset+len(attribute), 'message' : attribute+" is not a valid attribute for "+tag.lower(), 'type': "practice"}
                 self.practiceErrors.append(debugError) 
             # lang is valid tag for html as in http://www.w3.org/TR/html5/semantics.html
             elif (attribute.lower() == "lang" and tag.lower() == "html"):
@@ -294,6 +298,7 @@ class MyHTMLParserV2(HTMLParser):
     def parse(self, htmlString):
 
         sql = SqlFunctions();
+        self.inCode = str(htmlString).splitlines()
         
         self.feed(htmlString)
 
