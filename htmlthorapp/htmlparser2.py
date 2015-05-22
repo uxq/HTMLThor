@@ -172,20 +172,35 @@ class MyHTMLParserV2(HTMLParser):
         requiredClosingTags = ["html", "head", "body", "!doctype", "title", "meta", "main", "base"]
 
         currentIsSelfClosing = sql.isSelfClosing(tag.lower());
-        lastOpened = self.openedTag[-1]
+        
         if (currentIsSelfClosing):
             return 0
-        elif (lastOpened.tagName != tag.lower()): 
-            #No open tag found for current closing tag!
-            matchFound = True
-            error = {'line': line, 'column': lastOpened.position[1], 'column_end': offset, 'message' : "This tag has never been opened! Make sure you always open and close HTML tags.", 'type': "syntax"}
-            self.syntaxErrors.append(error)
+        elif(len(self.openedTag) > 0):
+            lastOpened = self.openedTag[-1]
+            print "Closed tag " + tag + " - corresponding opened tag was " + lastOpened.tagName
+            while (lastOpened.tagName != tag.lower()): 
+                #Closing tag isn't same as last opened tag
+                #matchFound = True
+                error = {'line': lastOpened.position[0], 'column': lastOpened.position[1], 'column_end': offset, 'message' : "This tag hasn't been closed! Make sure you always open and close all HTML tags.", 'type': "syntax"}
+                self.syntaxErrors.append(error)
+
+                if (len(self.openedTag) > 1):
+                    print "Deleting " + lastOpened.tagName
+                    del self.openedTag[-1]
+                    lastOpened = self.openedTag[-1]
+                    print "Trying again with " + lastOpened.tagName
+                else:
+                    break
+        else:
+            return 0
 
         #Look for tag. If tag isn't closed (no match is found), mark as error on tag.
 
         while (len(self.openedTag) > 0 and not matchFound):
 
-            _tag = self.openedTag[-1]
+            lastOpened = self.openedTag[-1]
+            _tag = lastOpened
+            print "Checking tag " + tag + " - corresponding opened tag was " + _tag.tagName
             
             if (_tag.tagName == tag.lower()):
                 matchFound = True
