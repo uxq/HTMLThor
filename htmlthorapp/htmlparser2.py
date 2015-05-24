@@ -90,7 +90,11 @@ class MyHTMLParserV2(HTMLParser):
         for attribute, value in attributes:
 
             # offset of first attribute
-            offset = self.inCode[line-1].find(attribute)
+            offset = 0
+            if (len(self.inCode) >= line-1):
+                #print line
+                #print self.inCode[line-1]
+                offset = self.inCode[line-1].find(attribute)
 
             #check for charset existance
             if(tag.lower() == "meta" and attribute.lower() == "charset" and value.lower() == "utf-8"): 

@@ -169,16 +169,16 @@ def checkFile(uploadFile, file_extension):
             name = file.filename
             
             # Add file to folder
-            if (file.file_size > 0 and name.find("__MACOSX") == -1 and name.find(".DS_Store") == -1):
+            if (file.file_size > 0 and name.find("__MACOSX") == -1 and name.find(".DS_Store") == -1 and name.find(".db") == -1):
                 addFileToFolder(name)
                 allZipFiles.append(file)
 
         for file in allZipFiles:
             
             name = file.filename
-            # print name
 
             if(os.path.splitext(name)[-1].lower()==".html" or os.path.splitext(name)[-1].lower()==".php"):
+                #print "Now parsing " + name
                 try:
                     data = zipFile.read(name)
                     errors = initialiseErrors(name.split("/")[-1])
