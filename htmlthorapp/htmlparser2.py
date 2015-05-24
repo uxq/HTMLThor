@@ -177,7 +177,7 @@ class MyHTMLParserV2(HTMLParser):
             return 0
         elif(len(self.openedTag) > 0):
             lastOpened = self.openedTag[-1]
-            print "Closed tag " + tag + " - corresponding opened tag was " + lastOpened.tagName
+            #print "Closed tag " + tag + " - corresponding opened tag was " + lastOpened.tagName
             while (lastOpened.tagName != tag.lower()): 
                 #Closing tag isn't same as last opened tag
                 #matchFound = True
@@ -188,7 +188,7 @@ class MyHTMLParserV2(HTMLParser):
                     print "Deleting " + lastOpened.tagName
                     del self.openedTag[-1]
                     lastOpened = self.openedTag[-1]
-                    print "Trying again with " + lastOpened.tagName
+                    #print "Trying again with " + lastOpened.tagName
                 else:
                     break
         else:
@@ -200,7 +200,7 @@ class MyHTMLParserV2(HTMLParser):
 
             lastOpened = self.openedTag[-1]
             _tag = lastOpened
-            print "Checking tag " + tag + " - corresponding opened tag was " + _tag.tagName
+            #print "Checking tag " + tag + " - corresponding opened tag was " + _tag.tagName
             
             if (_tag.tagName == tag.lower()):
                 matchFound = True
